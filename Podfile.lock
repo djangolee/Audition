@@ -1,0 +1,20 @@
+PODS:
+  - JoUIKit (0.0.10)
+  - SnapKit (4.0.0)
+
+DEPENDENCIES:
+  - JoUIKit
+  - SnapKit
+
+SPEC REPOS:
+  https://github.com/cocoapods/specs.git:
+    - JoUIKit
+    - SnapKit
+
+SPEC CHECKSUMS:
+  JoUIKit: 11ca8c3f4398e540619608800b2ec00959abe6a5
+  SnapKit: a42d492c16e80209130a3379f73596c3454b7694
+
+PODFILE CHECKSUM: 3299e94d0faa78ab7453f0a03584a1706019957f
+
+COCOAPODS: 1.5.3
