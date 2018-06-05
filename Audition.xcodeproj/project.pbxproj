@@ -10,6 +10,7 @@
 		603C7AFC20C588A900C21DD2 /* UIImage+Icon.swift in Sources */ = {isa = PBXBuildFile; fileRef = 603C7AF720C588A900C21DD2 /* UIImage+Icon.swift */; };
 		603C7AFD20C588A900C21DD2 /* UIFont+Icon.swift in Sources */ = {isa = PBXBuildFile; fileRef = 603C7AF820C588A900C21DD2 /* UIFont+Icon.swift */; };
 		603C7AFF20C588A900C21DD2 /* String+Icon.swift in Sources */ = {isa = PBXBuildFile; fileRef = 603C7AFB20C588A900C21DD2 /* String+Icon.swift */; };
+		60B13C7E20C6C7A3007A7AC6 /* FileManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60B13C7D20C6C7A3007A7AC6 /* FileManager.swift */; };
 		60B8F54320C56F1300053098 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60B8F54220C56F1300053098 /* AppDelegate.swift */; };
 		60B8F54A20C56F1400053098 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 60B8F54920C56F1400053098 /* Assets.xcassets */; };
 		60B8F54D20C56F1400053098 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 60B8F54B20C56F1400053098 /* LaunchScreen.storyboard */; };
@@ -22,6 +23,7 @@
 		603C7AF720C588A900C21DD2 /* UIImage+Icon.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIImage+Icon.swift"; sourceTree = "<group>"; };
 		603C7AF820C588A900C21DD2 /* UIFont+Icon.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIFont+Icon.swift"; sourceTree = "<group>"; };
 		603C7AFB20C588A900C21DD2 /* String+Icon.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "String+Icon.swift"; sourceTree = "<group>"; };
+		60B13C7D20C6C7A3007A7AC6 /* FileManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileManager.swift; sourceTree = "<group>"; };
 		60B8F53F20C56F1300053098 /* Audition.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Audition.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		60B8F54220C56F1300053098 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		60B8F54920C56F1400053098 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -73,6 +75,14 @@
 			path = Resource;
 			sourceTree = "<group>";
 		};
+		60B13C7C20C6C770007A7AC6 /* FileManager */ = {
+			isa = PBXGroup;
+			children = (
+				60B13C7D20C6C7A3007A7AC6 /* FileManager.swift */,
+			);
+			path = FileManager;
+			sourceTree = "<group>";
+		};
 		60B8F53620C56F1300053098 = {
 			isa = PBXGroup;
 			children = (
@@ -94,6 +104,7 @@
 		60B8F54120C56F1300053098 /* Source */ = {
 			isa = PBXGroup;
 			children = (
+				60B13C7C20C6C770007A7AC6 /* FileManager */,
 				603C7AF620C588A900C21DD2 /* UIFont */,
 				60B8F55620C56F9200053098 /* App */,
 				60B8F55520C56F3F00053098 /* Supporting Files */,
@@ -246,6 +257,7 @@
 				60B8F54320C56F1300053098 /* AppDelegate.swift in Sources */,
 				60B8F55820C56FB400053098 /* RootNavigationController.swift in Sources */,
 				603C7AFC20C588A900C21DD2 /* UIImage+Icon.swift in Sources */,
+				60B13C7E20C6C7A3007A7AC6 /* FileManager.swift in Sources */,
 				60B8F55A20C56FC000053098 /* RootViewController.swift in Sources */,
 				603C7AFD20C588A900C21DD2 /* UIFont+Icon.swift in Sources */,
 				603C7AFF20C588A900C21DD2 /* String+Icon.swift in Sources */,

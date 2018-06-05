@@ -13,23 +13,29 @@ import SnapKit
 class RootViewController: UIViewController {
     
     private let tableView = UITableView()
-    
+    private var source = [FileManager.FileInfo]()
 }
 
 extension RootViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 10
+        return source.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.jo.dequeueReusableCell(UITableViewCell.self)!
-        cell.imageView?.image = UIImage(named: "mp3")
+        let file = source[indexPath.item]
+        cell.textLabel?.text = file.name
+        cell.imageView?.image = file.fileIcon
         return cell
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 45
+        return 65
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.cellForRow(at: indexPath)?.setSelected(false, animated: true)
     }
 }
 
@@ -40,6 +46,7 @@ extension RootViewController {
     override func jo_viewDidInstallSubviews() {
         super.jo_viewDidInstallSubviews()
         title = "Audition"
+        source = FileManager.default.scanAudio() ?? []
     }
     
     override func jo_setupSubviews() {
