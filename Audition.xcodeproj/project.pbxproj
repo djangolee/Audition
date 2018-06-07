@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		6034FF5120C9671400A3D3C5 /* LibraryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6034FF5020C9671400A3D3C5 /* LibraryViewController.swift */; };
+		6034FF5320C968C400A3D3C5 /* LibraryTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6034FF5220C968C400A3D3C5 /* LibraryTableViewCell.swift */; };
 		603C7AFC20C588A900C21DD2 /* UIImage+Icon.swift in Sources */ = {isa = PBXBuildFile; fileRef = 603C7AF720C588A900C21DD2 /* UIImage+Icon.swift */; };
 		603C7AFD20C588A900C21DD2 /* UIFont+Icon.swift in Sources */ = {isa = PBXBuildFile; fileRef = 603C7AF820C588A900C21DD2 /* UIFont+Icon.swift */; };
 		603C7AFF20C588A900C21DD2 /* String+Icon.swift in Sources */ = {isa = PBXBuildFile; fileRef = 603C7AFB20C588A900C21DD2 /* String+Icon.swift */; };
@@ -14,12 +16,12 @@
 		60B8F54320C56F1300053098 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60B8F54220C56F1300053098 /* AppDelegate.swift */; };
 		60B8F54A20C56F1400053098 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 60B8F54920C56F1400053098 /* Assets.xcassets */; };
 		60B8F54D20C56F1400053098 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 60B8F54B20C56F1400053098 /* LaunchScreen.storyboard */; };
-		60B8F55820C56FB400053098 /* RootNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60B8F55720C56FB400053098 /* RootNavigationController.swift */; };
-		60B8F55A20C56FC000053098 /* RootViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60B8F55920C56FC000053098 /* RootViewController.swift */; };
 		FBF53871D7033834DEF2ACCF /* Pods_Audition.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CCA5D757B290420A94FB50CC /* Pods_Audition.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		6034FF5020C9671400A3D3C5 /* LibraryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryViewController.swift; sourceTree = "<group>"; };
+		6034FF5220C968C400A3D3C5 /* LibraryTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryTableViewCell.swift; sourceTree = "<group>"; };
 		603C7AF720C588A900C21DD2 /* UIImage+Icon.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIImage+Icon.swift"; sourceTree = "<group>"; };
 		603C7AF820C588A900C21DD2 /* UIFont+Icon.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIFont+Icon.swift"; sourceTree = "<group>"; };
 		603C7AFB20C588A900C21DD2 /* String+Icon.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "String+Icon.swift"; sourceTree = "<group>"; };
@@ -29,8 +31,6 @@
 		60B8F54920C56F1400053098 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		60B8F54C20C56F1400053098 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		60B8F54E20C56F1400053098 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		60B8F55720C56FB400053098 /* RootNavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootNavigationController.swift; sourceTree = "<group>"; };
-		60B8F55920C56FC000053098 /* RootViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootViewController.swift; sourceTree = "<group>"; };
 		8E65410F6030124A6C4E9C96 /* Pods-Audition.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Audition.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Audition/Pods-Audition.debug.xcconfig"; sourceTree = "<group>"; };
 		BEB7E879B5BAA4E5F8DC8912 /* Pods-Audition.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Audition.release.xcconfig"; path = "Pods/Target Support Files/Pods-Audition/Pods-Audition.release.xcconfig"; sourceTree = "<group>"; };
 		CCA5D757B290420A94FB50CC /* Pods_Audition.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Audition.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -55,6 +55,15 @@
 				BEB7E879B5BAA4E5F8DC8912 /* Pods-Audition.release.xcconfig */,
 			);
 			name = Pods;
+			sourceTree = "<group>";
+		};
+		6034FF4F20C966FB00A3D3C5 /* Library */ = {
+			isa = PBXGroup;
+			children = (
+				6034FF5020C9671400A3D3C5 /* LibraryViewController.swift */,
+				6034FF5220C968C400A3D3C5 /* LibraryTableViewCell.swift */,
+			);
+			path = Library;
 			sourceTree = "<group>";
 		};
 		603C7AF620C588A900C21DD2 /* UIFont */ = {
@@ -104,6 +113,7 @@
 		60B8F54120C56F1300053098 /* Source */ = {
 			isa = PBXGroup;
 			children = (
+				6034FF4F20C966FB00A3D3C5 /* Library */,
 				60B13C7C20C6C770007A7AC6 /* FileManager */,
 				603C7AF620C588A900C21DD2 /* UIFont */,
 				60B8F55620C56F9200053098 /* App */,
@@ -126,8 +136,6 @@
 			isa = PBXGroup;
 			children = (
 				60B8F54220C56F1300053098 /* AppDelegate.swift */,
-				60B8F55920C56FC000053098 /* RootViewController.swift */,
-				60B8F55720C56FB400053098 /* RootNavigationController.swift */,
 			);
 			path = App;
 			sourceTree = "<group>";
@@ -175,6 +183,11 @@
 					60B8F53E20C56F1300053098 = {
 						CreatedOnToolsVersion = 9.4;
 						LastSwiftMigration = 1000;
+						SystemCapabilities = {
+							com.apple.BackgroundModes = {
+								enabled = 1;
+							};
+						};
 					};
 				};
 			};
@@ -255,10 +268,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				60B8F54320C56F1300053098 /* AppDelegate.swift in Sources */,
-				60B8F55820C56FB400053098 /* RootNavigationController.swift in Sources */,
+				6034FF5120C9671400A3D3C5 /* LibraryViewController.swift in Sources */,
 				603C7AFC20C588A900C21DD2 /* UIImage+Icon.swift in Sources */,
 				60B13C7E20C6C7A3007A7AC6 /* FileManager.swift in Sources */,
-				60B8F55A20C56FC000053098 /* RootViewController.swift in Sources */,
+				6034FF5320C968C400A3D3C5 /* LibraryTableViewCell.swift in Sources */,
 				603C7AFD20C588A900C21DD2 /* UIFont+Icon.swift in Sources */,
 				603C7AFF20C588A900C21DD2 /* String+Icon.swift in Sources */,
 			);
@@ -400,7 +413,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 673AB3A2L9;
 				INFOPLIST_FILE = "$(SRCROOT)/Source/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -420,7 +433,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 673AB3A2L9;
 				INFOPLIST_FILE = "$(SRCROOT)/Source/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
