@@ -18,17 +18,17 @@ extension FileManager {
         
         let date: Date?
         let size: Int?
+        let subcount: Int?
         let type: FileAttributeType
         
-        var fileIcon: UIImage? {
-            if type == FileAttributeType.typeUnknown {
-                return UIImage(named: "file")
-            } else if type == FileAttributeType.typeDirectory {
-                return UIImage(named: "folder")
-            } else if ["mp3", "wav"].contains(pathExtension) {
-                return UIImage(named: "audio")
+        var des: String {
+            var string = dateString
+            if type == .typeDirectory {
+                string += " - \(subcount ?? 0) item"
+            } else {
+                string += " - \(sizeString)"
             }
-            return UIImage(named: "file")
+            return string
         }
         
         var isSound: Bool {
@@ -54,6 +54,7 @@ extension FileManager {
                 date = attributes[FileAttributeKey.modificationDate] as? Date
                 size = attributes[FileAttributeKey.size] as? Int
                 type = (attributes[FileAttributeKey.type] as? FileAttributeType) ?? .typeUnknown
+                subcount = FileManager.default.subpaths(atPath: path)?.count
             } else {
                 return nil
             }
@@ -64,16 +65,54 @@ extension FileManager {
                 else { return nil }
             return FileManager.default.scanDirectory(path)
         }
+        
+        var dateString: String {
+            if let date = date {
+                let formater = DateFormatter()
+                formater.dateFormat = "dd/MM/yyyy"
+                return formater.string(from: date)
+            } else {
+                return "-/-/-"
+            }
+        }
+        
+        var sizeString: String {
+            if let size = size {
+                if size < 1024 {
+                    return "\(size) bytes"
+                }
+                let nkb = Float(size) / 1024.0
+                if nkb < 1024 {
+                    return "\(Float(Int(nkb * 100)) / 100.0) KB"
+                }
+                let nmb = nkb / 1024.0
+                if nmb < 1024 {
+                    return "\(Float(Int(nmb * 100)) / 100.0) MB"
+                }
+                let ngb = nmb / 1024.0
+                if ngb < 1024 {
+                    return "\(Float(Int(ngb * 100)) / 100.0) GB"
+                }
+            }
+            return "- bytes"
+        }
+        
+        var fileIcon: UIImage? {
+            if type == FileAttributeType.typeUnknown {
+                return UIImage(named: "file")
+            } else if type == FileAttributeType.typeDirectory {
+                return UIImage(named: "folder")
+            } else if ["mp3", "wav"].contains(pathExtension) {
+                return UIImage(named: "audio")
+            }
+            return UIImage(named: "file")
+        }
     }
     
     #if arch(i386) || arch(x86_64)
-    public private(set) static var ScanDirectory = Home + "/Documents/Audio"
-    public private(set) static var AudioDirectory = Home + "/Library/Audio"
     public private(set) static var Home = "/Users/panghu/Source/Sandbox"
     #else
-    public private(set) static var ScanDirectory = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).first!
-    public private(set) static var AudioDirectory = NSSearchPathForDirectoriesInDomains(.libraryDirectory, .userDomainMask, true).first! + "/Audio"
-    public private(set) static var Home = NSHomeDirectory()
+    public private(set) static var Home = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).first!
     #endif
     
     public func scanDirectory(_ path: String) -> [FileInfo]? {
@@ -101,7 +140,7 @@ extension FileManager {
     }
     
     public func scan() -> [FileInfo]? {
-        return scanDirectory(FileManager.ScanDirectory)
+        return scanDirectory(FileManager.Home)
     }
     
     

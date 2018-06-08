@@ -12,6 +12,8 @@
 		603C7AFC20C588A900C21DD2 /* UIImage+Icon.swift in Sources */ = {isa = PBXBuildFile; fileRef = 603C7AF720C588A900C21DD2 /* UIImage+Icon.swift */; };
 		603C7AFD20C588A900C21DD2 /* UIFont+Icon.swift in Sources */ = {isa = PBXBuildFile; fileRef = 603C7AF820C588A900C21DD2 /* UIFont+Icon.swift */; };
 		603C7AFF20C588A900C21DD2 /* String+Icon.swift in Sources */ = {isa = PBXBuildFile; fileRef = 603C7AFB20C588A900C21DD2 /* String+Icon.swift */; };
+		60A1B67220CA0DF200491644 /* PreviewPlayControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60A1B67020CA0DF200491644 /* PreviewPlayControl.swift */; };
+		60A1B67320CA0DF200491644 /* PreviewPlayControlLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60A1B67120CA0DF200491644 /* PreviewPlayControlLayer.swift */; };
 		60B13C7E20C6C7A3007A7AC6 /* FileManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60B13C7D20C6C7A3007A7AC6 /* FileManager.swift */; };
 		60B8F54320C56F1300053098 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60B8F54220C56F1300053098 /* AppDelegate.swift */; };
 		60B8F54A20C56F1400053098 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 60B8F54920C56F1400053098 /* Assets.xcassets */; };
@@ -25,6 +27,8 @@
 		603C7AF720C588A900C21DD2 /* UIImage+Icon.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIImage+Icon.swift"; sourceTree = "<group>"; };
 		603C7AF820C588A900C21DD2 /* UIFont+Icon.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIFont+Icon.swift"; sourceTree = "<group>"; };
 		603C7AFB20C588A900C21DD2 /* String+Icon.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "String+Icon.swift"; sourceTree = "<group>"; };
+		60A1B67020CA0DF200491644 /* PreviewPlayControl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PreviewPlayControl.swift; sourceTree = "<group>"; };
+		60A1B67120CA0DF200491644 /* PreviewPlayControlLayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PreviewPlayControlLayer.swift; sourceTree = "<group>"; };
 		60B13C7D20C6C7A3007A7AC6 /* FileManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileManager.swift; sourceTree = "<group>"; };
 		60B8F53F20C56F1300053098 /* Audition.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Audition.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		60B8F54220C56F1300053098 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -84,6 +88,15 @@
 			path = Resource;
 			sourceTree = "<group>";
 		};
+		60A1B66F20CA0DF200491644 /* PreviewPlayControl */ = {
+			isa = PBXGroup;
+			children = (
+				60A1B67020CA0DF200491644 /* PreviewPlayControl.swift */,
+				60A1B67120CA0DF200491644 /* PreviewPlayControlLayer.swift */,
+			);
+			path = PreviewPlayControl;
+			sourceTree = "<group>";
+		};
 		60B13C7C20C6C770007A7AC6 /* FileManager */ = {
 			isa = PBXGroup;
 			children = (
@@ -113,6 +126,7 @@
 		60B8F54120C56F1300053098 /* Source */ = {
 			isa = PBXGroup;
 			children = (
+				60A1B66F20CA0DF200491644 /* PreviewPlayControl */,
 				6034FF4F20C966FB00A3D3C5 /* Library */,
 				60B13C7C20C6C770007A7AC6 /* FileManager */,
 				603C7AF620C588A900C21DD2 /* UIFont */,
@@ -268,9 +282,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				60B8F54320C56F1300053098 /* AppDelegate.swift in Sources */,
+				60A1B67320CA0DF200491644 /* PreviewPlayControlLayer.swift in Sources */,
 				6034FF5120C9671400A3D3C5 /* LibraryViewController.swift in Sources */,
 				603C7AFC20C588A900C21DD2 /* UIImage+Icon.swift in Sources */,
 				60B13C7E20C6C7A3007A7AC6 /* FileManager.swift in Sources */,
+				60A1B67220CA0DF200491644 /* PreviewPlayControl.swift in Sources */,
 				6034FF5320C968C400A3D3C5 /* LibraryTableViewCell.swift in Sources */,
 				603C7AFD20C588A900C21DD2 /* UIFont+Icon.swift in Sources */,
 				603C7AFF20C588A900C21DD2 /* String+Icon.swift in Sources */,

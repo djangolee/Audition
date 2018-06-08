@@ -19,11 +19,26 @@ class LibraryTableViewCell: UITableViewCell {
     internal let iconImageView = UIImageView()
     internal let fileNameLable = UILabel()
     internal let describeLabel = UILabel()
+    internal let playControl = PreviewPlayControl()
     
     public func render(_ file: FileManager.FileInfo) {
         self.file = file
         iconImageView.image = file.fileIcon
         fileNameLable.text = file.name
+        describeLabel.text = file.des
+        playControl.playState = .pause
+        playControl.isHidden = true
+    }
+    
+    @objc private func onClickPlayControl(_ sender: PreviewPlayControl) {
+        switch sender.playState {
+        case .prepare:
+            sender.playState = .play
+        case .play:
+            sender.playState = .pause
+        case .pause:
+            sender.playState = .prepare
+        }
     }
 }
 
@@ -36,6 +51,7 @@ extension LibraryTableViewCell {
         
         setupIconImageView()
         setupLabel()
+        setupPlayControl()
     }
     
     override func jo_makeSubviewsLayout() {
@@ -57,6 +73,13 @@ extension LibraryTableViewCell {
             maker.leading.equalTo(fileNameLable)
             maker.top.equalTo(fileNameLable.snp.bottom).offset(2)
         }
+        
+        playControl.snp.updateConstraints { (maker) in
+            maker.width.height.equalTo(35)
+            maker.centerY.equalToSuperview()
+            maker.trailing.equalToSuperview().inset(20)
+        }
+        
     }
     
     override func jo_viewDidInstallSubviews() {
@@ -80,4 +103,9 @@ extension LibraryTableViewCell {
         contentView.addSubview(describeLabel)
     }
     
+    private func setupPlayControl() {
+        
+        playControl.addTarget(self, action: #selector(onClickPlayControl(_:)), for: .touchUpInside)
+        contentView.addSubview(playControl)
+    }
 }
