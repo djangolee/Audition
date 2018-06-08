@@ -1,5 +1,5 @@
 //
-//  PreviewPlayControl.swift
+//  PlayControl.swift
 //  Listening
 //
 //  Created by Panghu Lee on 30/11/2017.
@@ -8,11 +8,11 @@
 
 import UIKit
 
-open class PreviewPlayControl: UIButton {
+open class PlayControl: UIButton {
 
-    private let playIcon = PreviewPlayControlLayer()
+    private let playIcon = PlayControlLayer()
     
-    public var playState: PreviewPlayControlLayer.State {
+    public var playState: PlayControlLayer.State {
         get { return playIcon.state }
         set { playIcon.state = newValue }
     }
@@ -25,7 +25,7 @@ open class PreviewPlayControl: UIButton {
     //MARK: Autolayout
 
     override open func sizeThatFits(_ size: CGSize) -> CGSize {
-        let maxSize = PreviewPlayControlLayer.outerSize
+        let maxSize = PlayControlLayer.outerSize
         return CGSize(width: maxSize, height: maxSize)
     }
     
@@ -38,7 +38,7 @@ open class PreviewPlayControl: UIButton {
 
 //MARK: Load View
 
-extension PreviewPlayControl {
+extension PlayControl {
     
     open override func layoutSubviews() {
         super.layoutSubviews()

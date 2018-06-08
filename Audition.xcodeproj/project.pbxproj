@@ -12,9 +12,10 @@
 		603C7AFC20C588A900C21DD2 /* UIImage+Icon.swift in Sources */ = {isa = PBXBuildFile; fileRef = 603C7AF720C588A900C21DD2 /* UIImage+Icon.swift */; };
 		603C7AFD20C588A900C21DD2 /* UIFont+Icon.swift in Sources */ = {isa = PBXBuildFile; fileRef = 603C7AF820C588A900C21DD2 /* UIFont+Icon.swift */; };
 		603C7AFF20C588A900C21DD2 /* String+Icon.swift in Sources */ = {isa = PBXBuildFile; fileRef = 603C7AFB20C588A900C21DD2 /* String+Icon.swift */; };
-		60A1B67220CA0DF200491644 /* PreviewPlayControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60A1B67020CA0DF200491644 /* PreviewPlayControl.swift */; };
-		60A1B67320CA0DF200491644 /* PreviewPlayControlLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60A1B67120CA0DF200491644 /* PreviewPlayControlLayer.swift */; };
 		60B13C7E20C6C7A3007A7AC6 /* FileManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60B13C7D20C6C7A3007A7AC6 /* FileManager.swift */; };
+		60B5BA3A20CABF0E0062CA1B /* PlayControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60B5BA3820CABF0E0062CA1B /* PlayControl.swift */; };
+		60B5BA3B20CABF0E0062CA1B /* PlayControlLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60B5BA3920CABF0E0062CA1B /* PlayControlLayer.swift */; };
+		60B5BA3D20CABF610062CA1B /* AudioTabbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60B5BA3C20CABF610062CA1B /* AudioTabbar.swift */; };
 		60B8F54320C56F1300053098 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60B8F54220C56F1300053098 /* AppDelegate.swift */; };
 		60B8F54A20C56F1400053098 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 60B8F54920C56F1400053098 /* Assets.xcassets */; };
 		60B8F54D20C56F1400053098 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 60B8F54B20C56F1400053098 /* LaunchScreen.storyboard */; };
@@ -27,9 +28,10 @@
 		603C7AF720C588A900C21DD2 /* UIImage+Icon.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIImage+Icon.swift"; sourceTree = "<group>"; };
 		603C7AF820C588A900C21DD2 /* UIFont+Icon.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIFont+Icon.swift"; sourceTree = "<group>"; };
 		603C7AFB20C588A900C21DD2 /* String+Icon.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "String+Icon.swift"; sourceTree = "<group>"; };
-		60A1B67020CA0DF200491644 /* PreviewPlayControl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PreviewPlayControl.swift; sourceTree = "<group>"; };
-		60A1B67120CA0DF200491644 /* PreviewPlayControlLayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PreviewPlayControlLayer.swift; sourceTree = "<group>"; };
 		60B13C7D20C6C7A3007A7AC6 /* FileManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileManager.swift; sourceTree = "<group>"; };
+		60B5BA3820CABF0E0062CA1B /* PlayControl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayControl.swift; sourceTree = "<group>"; };
+		60B5BA3920CABF0E0062CA1B /* PlayControlLayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayControlLayer.swift; sourceTree = "<group>"; };
+		60B5BA3C20CABF610062CA1B /* AudioTabbar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioTabbar.swift; sourceTree = "<group>"; };
 		60B8F53F20C56F1300053098 /* Audition.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Audition.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		60B8F54220C56F1300053098 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		60B8F54920C56F1400053098 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -88,21 +90,22 @@
 			path = Resource;
 			sourceTree = "<group>";
 		};
-		60A1B66F20CA0DF200491644 /* PreviewPlayControl */ = {
-			isa = PBXGroup;
-			children = (
-				60A1B67020CA0DF200491644 /* PreviewPlayControl.swift */,
-				60A1B67120CA0DF200491644 /* PreviewPlayControlLayer.swift */,
-			);
-			path = PreviewPlayControl;
-			sourceTree = "<group>";
-		};
 		60B13C7C20C6C770007A7AC6 /* FileManager */ = {
 			isa = PBXGroup;
 			children = (
 				60B13C7D20C6C7A3007A7AC6 /* FileManager.swift */,
 			);
 			path = FileManager;
+			sourceTree = "<group>";
+		};
+		60B5BA3720CABF0E0062CA1B /* PlayControl */ = {
+			isa = PBXGroup;
+			children = (
+				60B5BA3C20CABF610062CA1B /* AudioTabbar.swift */,
+				60B5BA3820CABF0E0062CA1B /* PlayControl.swift */,
+				60B5BA3920CABF0E0062CA1B /* PlayControlLayer.swift */,
+			);
+			path = PlayControl;
 			sourceTree = "<group>";
 		};
 		60B8F53620C56F1300053098 = {
@@ -126,7 +129,7 @@
 		60B8F54120C56F1300053098 /* Source */ = {
 			isa = PBXGroup;
 			children = (
-				60A1B66F20CA0DF200491644 /* PreviewPlayControl */,
+				60B5BA3720CABF0E0062CA1B /* PlayControl */,
 				6034FF4F20C966FB00A3D3C5 /* Library */,
 				60B13C7C20C6C770007A7AC6 /* FileManager */,
 				603C7AF620C588A900C21DD2 /* UIFont */,
@@ -244,11 +247,15 @@
 			inputPaths = (
 				"${SRCROOT}/Pods/Target Support Files/Pods-Audition/Pods-Audition-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/JoUIKit/JoUIKit.framework",
+				"${BUILT_PRODUCTS_DIR}/Realm/Realm.framework",
+				"${BUILT_PRODUCTS_DIR}/RealmSwift/RealmSwift.framework",
 				"${BUILT_PRODUCTS_DIR}/SnapKit/SnapKit.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/JoUIKit.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Realm.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RealmSwift.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SnapKit.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -282,12 +289,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				60B8F54320C56F1300053098 /* AppDelegate.swift in Sources */,
-				60A1B67320CA0DF200491644 /* PreviewPlayControlLayer.swift in Sources */,
 				6034FF5120C9671400A3D3C5 /* LibraryViewController.swift in Sources */,
 				603C7AFC20C588A900C21DD2 /* UIImage+Icon.swift in Sources */,
 				60B13C7E20C6C7A3007A7AC6 /* FileManager.swift in Sources */,
-				60A1B67220CA0DF200491644 /* PreviewPlayControl.swift in Sources */,
+				60B5BA3D20CABF610062CA1B /* AudioTabbar.swift in Sources */,
+				60B5BA3A20CABF0E0062CA1B /* PlayControl.swift in Sources */,
 				6034FF5320C968C400A3D3C5 /* LibraryTableViewCell.swift in Sources */,
+				60B5BA3B20CABF0E0062CA1B /* PlayControlLayer.swift in Sources */,
 				603C7AFD20C588A900C21DD2 /* UIFont+Icon.swift in Sources */,
 				603C7AFF20C588A900C21DD2 /* String+Icon.swift in Sources */,
 			);

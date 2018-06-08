@@ -19,7 +19,7 @@ class LibraryTableViewCell: UITableViewCell {
     internal let iconImageView = UIImageView()
     internal let fileNameLable = UILabel()
     internal let describeLabel = UILabel()
-    internal let playControl = PreviewPlayControl()
+    internal let playControl = PlayControl()
     
     public func render(_ file: FileManager.FileInfo) {
         self.file = file
@@ -30,7 +30,7 @@ class LibraryTableViewCell: UITableViewCell {
         playControl.isHidden = true
     }
     
-    @objc private func onClickPlayControl(_ sender: PreviewPlayControl) {
+    @objc private func onClickPlayControl(_ sender: PlayControl) {
         switch sender.playState {
         case .prepare:
             sender.playState = .play

@@ -1,5 +1,5 @@
 //
-//  PreviewPlayControlLayer.swift
+//  PlayControlLayer.swift
 //  Listening
 //
 //  Created by Panghu Lee on 30/11/2017.
@@ -8,7 +8,7 @@
 
 import UIKit
 
-public class PreviewPlayControlLayer: CALayer {
+public class PlayControlLayer: CALayer {
     
     public enum State {
         case prepare
@@ -43,7 +43,7 @@ public class PreviewPlayControlLayer: CALayer {
 
 //MARK: Load View
 
-extension PreviewPlayControlLayer {
+extension PlayControlLayer {
     
     override public func layoutSublayers() {
         super.layoutSublayers()
@@ -58,8 +58,8 @@ extension PreviewPlayControlLayer {
     public override func jo_makeSublayersLayout() {
         super.jo_makeSublayersLayout()
         
-        let outer = PreviewPlayControlLayer.outerSize
-        let inner = PreviewPlayControlLayer.innerSize
+        let outer = PlayControlLayer.outerSize
+        let inner = PlayControlLayer.innerSize
         
         outerCircle.frame.size = CGSize(width: outer, height: outer)
         outerCircle.cornerRadius = outerCircle.frame.width / 2
@@ -88,7 +88,7 @@ extension PreviewPlayControlLayer {
         updateStateLayoutOuterAndBackgroud()
     }
     
-    private func updateState(old: PreviewPlayControlLayer.State) {
+    private func updateState(old: PlayControlLayer.State) {
         updateStateLayoutIcon()
         updateStateLayoutOuterAndBackgroud()
         prepareState.isHidden = state != .prepare
@@ -96,8 +96,8 @@ extension PreviewPlayControlLayer {
     }
     
     private func updateStateLayoutOuterAndBackgroud() {
-        let outer = PreviewPlayControlLayer.outerSize
-        let inner = PreviewPlayControlLayer.innerSize
+        let outer = PlayControlLayer.outerSize
+        let inner = PlayControlLayer.innerSize
         let center = CGPoint(x: bounds.width / 2, y: bounds.height / 2)
         
         outerCircle.transform = state == .pause ? CATransform3DMakeScale(0, 0, 0) : CATransform3DMakeScale(1, 1, 1)
@@ -141,8 +141,8 @@ extension PreviewPlayControlLayer {
     }
     
     private func setupSubLayer() {
-        let black = PreviewPlayControlLayer.blackColor
-        let white = PreviewPlayControlLayer.whiteColor
+        let black = PlayControlLayer.blackColor
+        let white = PlayControlLayer.whiteColor
         
         backgroudLayer.backgroundColor = white
         addSublayer(backgroudLayer)
@@ -172,7 +172,7 @@ extension PreviewPlayControlLayer {
     
     private func setupReplicatorLayer() {
         let count: Int = 15
-        let size = PreviewPlayControlLayer.outerSize
+        let size = PlayControlLayer.outerSize
         let path = UIBezierPath()
         path.move(to: CGPoint.zero)
         path.addArc(withCenter: CGPoint(x: 0, y: size / 2), radius: size / 2, startAngle: 1.5 * CGFloat.pi, endAngle: 1.5 * CGFloat.pi + CGFloat.pi * 2 / CGFloat(count), clockwise: true)
@@ -187,8 +187,8 @@ extension PreviewPlayControlLayer {
         let anim = CABasicAnimation(keyPath: #keyPath(CALayer.backgroundColor))
         anim.duration = 1
         anim.repeatCount = MAXFLOAT
-        anim.toValue = PreviewPlayControlLayer.whiteColor
-        anim.fromValue = PreviewPlayControlLayer.blackColor
+        anim.toValue = PlayControlLayer.whiteColor
+        anim.fromValue = PlayControlLayer.blackColor
         anim.isRemovedOnCompletion = false
         subLayer.add(anim, forKey: nil)
         

@@ -10,6 +10,8 @@ import UIKit
 
 class LibraryNavigationController: UINavigationController {
     
+    private let audioTabbar = AudioTabbar()
+    
     init() {
         let roor = LibraryViewController.init(FileManager.default.scan() ?? [], title: "Documents")
         super.init(rootViewController: roor)
@@ -31,6 +33,25 @@ class LibraryNavigationController: UINavigationController {
     override func jo_viewDidInstallSubviews() {
         super.jo_viewDidInstallSubviews()
         navigationBar.prefersLargeTitles = true
+        additionalSafeAreaInsets.bottom = 55;
+    }
+    
+    override func jo_setupSubviews() {
+        super.jo_setupSubviews()
+        setupAudioTabbar()
+    }
+    
+    override func jo_makeSubviewsLayout() {
+        super.jo_makeSubviewsLayout()
+        
+        audioTabbar.snp.makeConstraints { maker in
+            maker.centerX.equalToSuperview()
+            maker.bottomMargin.equalToSuperview()
+        }
+    }
+    
+    private func setupAudioTabbar() {
+        view.addSubview(audioTabbar)
     }
 }
 
