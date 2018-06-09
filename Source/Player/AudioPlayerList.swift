@@ -10,6 +10,41 @@ import UIKit
 
 class AudioPlayerList {
 
-    let playlist: [FileManager.FileInfo]? = nil
+    var playlist: [FileManager.FileInfo]? = nil
+    let audioPlayer = AudioPlayer.Sington
+    
+    
+    
+    private init() {
+        NotificationCenter.default.addObserver(self, selector: #selector(audioPlayChangeFile(_:)), name: AudioPlayer.audioPlayChangeFileNotification, object: AudioPlayer.Sington)
+    }
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
+    
+    @objc private func audioPlayChangeFile(_ sender: NSNotification) {
+        
+    }
+    
+    @discardableResult
+    public func play() -> AudioPlayer {
+        return audioPlayer.resume()
+    }
+    
+    @discardableResult
+    public func resume() -> AudioPlayer {
+        return audioPlayer.resume()
+    }
+    
+    @discardableResult
+    public func suspend() -> AudioPlayer {
+        return audioPlayer.suspend()
+    }
+    
+    @discardableResult
+    public func stop() -> AudioPlayer {
+        return audioPlayer.stop()
+    }
     
 }
