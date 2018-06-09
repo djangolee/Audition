@@ -13,6 +13,17 @@ class AudioTabbar: UIToolbar {
     private let icon = UIImageView(image: UIImage(named: "AudioIcon"))
     private let nameLabel = UILabel()
     
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        NotificationCenter.default.addObserver(self, selector: #selector(audioPlayChangeProgress(_:)), name: AudioPlayer.audioPlayChangeProgressNotification, object: AudioPlayer.Sington)
+        NotificationCenter.default.addObserver(self, selector: #selector(audioPlayChangeState(_:)), name: AudioPlayer.audioPlayChangeStateNotification, object: AudioPlayer.Sington)
+        NotificationCenter.default.addObserver(self, selector: #selector(audioPlayChangeFile(_:)), name: AudioPlayer.audioPlayChangeFileNotification, object: AudioPlayer.Sington)
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func safeAreaInsetsDidChange() {
         super.safeAreaInsetsDidChange()
         invalidateIntrinsicContentSize()
@@ -25,6 +36,21 @@ class AudioTabbar: UIToolbar {
     override var intrinsicContentSize: CGSize {
         return sizeThatFits(.zero)
     }
+    
+    @objc private func audioPlayChangeProgress(_ sender: NSNotification) {
+
+    }
+    
+    @objc private func audioPlayChangeState(_ sender: NSNotification) {
+
+    }
+    
+    @objc private func audioPlayChangeFile(_ sender: NSNotification) {
+        nameLabel.text = AudioPlayer.Sington.source?.name
+    }
+}
+
+extension AudioTabbar {
     
     override func jo_viewDidLoad() {
         super.jo_viewDidLoad()

@@ -58,9 +58,10 @@ class LibraryNavigationController: UINavigationController {
 
 private class LibraryViewController: UIViewController {
 
-    let source: [FileManager.FileInfo]
+    private let source: [FileManager.FileInfo]
     
     private let tableView = UITableView()
+    private var selectedIndexPath: IndexPath?
     
     init(_ files: [FileManager.FileInfo], title: String) {
         source = files
@@ -98,12 +99,24 @@ extension LibraryViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        tableView.cellForRow(at: indexPath)?.setSelected(false, animated: true)
+        guard let cell = tableView.cellForRow(at: indexPath) as? LibraryTableViewCell,
+            selectedIndexPath != indexPath
+            else { return }
+
+        if let selectedIndexPath = selectedIndexPath,
+            let selectedCell = tableView.cellForRow(at: selectedIndexPath) as? LibraryTableViewCell,
+            AudioPlayer.Sington.source != selectedCell.file {
+            
+            selectedCell.playControl.isHidden = true
+        }
+        
+        cell.setSelected(false, animated: true)
         let file = source[indexPath.item]
         if let source = file.contentsOfDirectory(), source.count > 0 {
             navigationController?.pushViewController(LibraryViewController(source, title: file.name), animated: true)
         } else if file.isSound, AudioPlayer.Sington.source != file {
-            AudioPlayer.Sington.play(file)
+            selectedIndexPath = indexPath
+            cell.playControl.isHidden = false
         }
     }
 }
