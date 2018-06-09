@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		6034E02020CBE154006A0A16 /* AudioPlayerList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6034E01F20CBE154006A0A16 /* AudioPlayerList.swift */; };
 		6034FF5120C9671400A3D3C5 /* LibraryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6034FF5020C9671400A3D3C5 /* LibraryViewController.swift */; };
 		6034FF5320C968C400A3D3C5 /* LibraryTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6034FF5220C968C400A3D3C5 /* LibraryTableViewCell.swift */; };
 		603C7AFC20C588A900C21DD2 /* UIImage+Icon.swift in Sources */ = {isa = PBXBuildFile; fileRef = 603C7AF720C588A900C21DD2 /* UIImage+Icon.swift */; };
@@ -24,6 +25,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		6034E01F20CBE154006A0A16 /* AudioPlayerList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioPlayerList.swift; sourceTree = "<group>"; };
 		6034FF5020C9671400A3D3C5 /* LibraryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryViewController.swift; sourceTree = "<group>"; };
 		6034FF5220C968C400A3D3C5 /* LibraryTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryTableViewCell.swift; sourceTree = "<group>"; };
 		603C7AF720C588A900C21DD2 /* UIImage+Icon.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIImage+Icon.swift"; sourceTree = "<group>"; };
@@ -96,6 +98,7 @@
 			isa = PBXGroup;
 			children = (
 				609E004720CBC7A30070F2CA /* AudioPlayer.swift */,
+				6034E01F20CBE154006A0A16 /* AudioPlayerList.swift */,
 			);
 			path = Player;
 			sourceTree = "<group>";
@@ -306,6 +309,7 @@
 				60B13C7E20C6C7A3007A7AC6 /* FileManager.swift in Sources */,
 				60B5BA3D20CABF610062CA1B /* AudioTabbar.swift in Sources */,
 				60B5BA3A20CABF0E0062CA1B /* PlayControl.swift in Sources */,
+				6034E02020CBE154006A0A16 /* AudioPlayerList.swift in Sources */,
 				6034FF5320C968C400A3D3C5 /* LibraryTableViewCell.swift in Sources */,
 				60B5BA3B20CABF0E0062CA1B /* PlayControlLayer.swift in Sources */,
 				603C7AFD20C588A900C21DD2 /* UIFont+Icon.swift in Sources */,

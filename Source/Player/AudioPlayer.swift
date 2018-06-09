@@ -9,7 +9,7 @@
 import UIKit
 import AVFoundation
 
-public class AudioPlayer {
+public class AudioPlayer: NSObject {
 
     // MARK: Notification
     
@@ -21,6 +21,7 @@ public class AudioPlayer {
         case playing
         case suspended
         case stop
+        case completed(Error?)
     }
     
     // MARK: property
@@ -39,8 +40,8 @@ public class AudioPlayer {
     
     // MARK: Private
     
-    private init() {
-        
+    private override init() {
+        super.init()
         AudioPlayer.setActive(true)
     }
     private var audioPlayer: AVAudioPlayer?
@@ -57,6 +58,7 @@ public class AudioPlayer {
         
         source = file
         audioPlayer = try? AVAudioPlayer(contentsOf: URL(fileURLWithPath: file.path))
+        audioPlayer?.delegate = self
         audioPlayer?.prepareToPlay()
         timer = Timer(timeInterval: 1 / 20.0, target: self, selector: #selector(timeRunloop(_:)), userInfo: nil, repeats: true)
         NotificationCenter.default.post(name: AudioPlayer.audioPlayChangeFileNotification, object: self)
@@ -118,6 +120,34 @@ public class AudioPlayer {
             print("Unable to activate audio session:  \(error.localizedDescription)")
         }
     }
+}
 
+extension AudioPlayer: AVAudioPlayerDelegate {
     
+    
+    public func audioPlayerDidFinishPlaying(_ player: AVAudioPlayer, successfully flag: Bool) {
+        state = .completed(nil)
+    }
+    
+    public func audioPlayerDecodeErrorDidOccur(_ player: AVAudioPlayer, error: Error?) {
+        state = .completed(error)
+    }
+    
+}
+
+extension AudioPlayer.State : Equatable {
+    public static func == (lhs: AudioPlayer.State, rhs: AudioPlayer.State) -> Bool {
+        switch (lhs, rhs) {
+        case (.completed(_), .completed(_)):
+            return true
+        case (.playing, .playing):
+            return true
+        case (.suspended, .suspended):
+            return true
+        case (.stop, .stop):
+            return true
+        default:
+            return false
+        }
+    }
 }
