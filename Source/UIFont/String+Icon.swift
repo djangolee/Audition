@@ -12,7 +12,10 @@ extension String {
     
     public enum UnicodeIcon: UInt32 {
 
-        case other = 0xe665
+        case previous = 0xe67d
+        case play = 0xe67f
+        case pause = 0xe681
+        case next = 0xe680
     }
     
     public init(_ icon: UnicodeIcon) {

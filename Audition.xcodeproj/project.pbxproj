@@ -13,6 +13,7 @@
 		603C7AFC20C588A900C21DD2 /* UIImage+Icon.swift in Sources */ = {isa = PBXBuildFile; fileRef = 603C7AF720C588A900C21DD2 /* UIImage+Icon.swift */; };
 		603C7AFD20C588A900C21DD2 /* UIFont+Icon.swift in Sources */ = {isa = PBXBuildFile; fileRef = 603C7AF820C588A900C21DD2 /* UIFont+Icon.swift */; };
 		603C7AFF20C588A900C21DD2 /* String+Icon.swift in Sources */ = {isa = PBXBuildFile; fileRef = 603C7AFB20C588A900C21DD2 /* String+Icon.swift */; };
+		6069E2B320CC2EB100C2A0D3 /* iconfont.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 6069E2B220CC2EB100C2A0D3 /* iconfont.ttf */; };
 		609E004820CBC7A30070F2CA /* AudioPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 609E004720CBC7A30070F2CA /* AudioPlayer.swift */; };
 		60B13C7E20C6C7A3007A7AC6 /* FileManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60B13C7D20C6C7A3007A7AC6 /* FileManager.swift */; };
 		60B5BA3A20CABF0E0062CA1B /* PlayControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60B5BA3820CABF0E0062CA1B /* PlayControl.swift */; };
@@ -31,6 +32,7 @@
 		603C7AF720C588A900C21DD2 /* UIImage+Icon.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIImage+Icon.swift"; sourceTree = "<group>"; };
 		603C7AF820C588A900C21DD2 /* UIFont+Icon.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIFont+Icon.swift"; sourceTree = "<group>"; };
 		603C7AFB20C588A900C21DD2 /* String+Icon.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "String+Icon.swift"; sourceTree = "<group>"; };
+		6069E2B220CC2EB100C2A0D3 /* iconfont.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = iconfont.ttf; sourceTree = "<group>"; };
 		609E004720CBC7A30070F2CA /* AudioPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioPlayer.swift; sourceTree = "<group>"; };
 		60B13C7D20C6C7A3007A7AC6 /* FileManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileManager.swift; sourceTree = "<group>"; };
 		60B5BA3820CABF0E0062CA1B /* PlayControl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayControl.swift; sourceTree = "<group>"; };
@@ -90,6 +92,7 @@
 		603C7AF920C588A900C21DD2 /* Resource */ = {
 			isa = PBXGroup;
 			children = (
+				6069E2B220CC2EB100C2A0D3 /* iconfont.ttf */,
 			);
 			path = Resource;
 			sourceTree = "<group>";
@@ -247,6 +250,7 @@
 			files = (
 				60B8F54D20C56F1400053098 /* LaunchScreen.storyboard in Resources */,
 				60B8F54A20C56F1400053098 /* Assets.xcassets in Resources */,
+				6069E2B320CC2EB100C2A0D3 /* iconfont.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

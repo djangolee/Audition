@@ -60,6 +60,10 @@ public class AudioPlayer: NSObject {
         audioPlayer = try? AVAudioPlayer(contentsOf: URL(fileURLWithPath: file.path))
         audioPlayer?.delegate = self
         audioPlayer?.prepareToPlay()
+        
+        timer = Timer(timeInterval: 1 / 20.0, target: self, selector: #selector(timeRunloop(_:)), userInfo: nil, repeats: true)
+        RunLoop.main.add(timer!, forMode: .commonModes)
+        
         NotificationCenter.default.post(name: AudioPlayer.audioPlayChangeFileNotification, object: self)
         
         return self
@@ -85,17 +89,11 @@ public class AudioPlayer: NSObject {
     @discardableResult
     public func resume() -> Self {
         guard let audioPlayer = audioPlayer,
-            !audioPlayer.isPlaying,
-            timer == nil,
             audioPlayer.play()
             
             else { return self }
         
         state = .playing
-        
-        timer = Timer(timeInterval: 1 / 20.0, target: self, selector: #selector(timeRunloop(_:)), userInfo: nil, repeats: true)
-        RunLoop.main.add(timer!, forMode: .commonModes)
-        
         return self
     }
     

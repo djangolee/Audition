@@ -47,6 +47,7 @@ class LibraryNavigationController: UINavigationController {
         audioTabbar.snp.makeConstraints { maker in
             maker.centerX.equalToSuperview()
             maker.bottomMargin.equalToSuperview()
+            maker.width.equalToSuperview()
         }
     }
     

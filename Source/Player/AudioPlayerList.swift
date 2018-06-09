@@ -13,8 +13,6 @@ class AudioPlayerList {
     var playlist: [FileManager.FileInfo]? = nil
     let audioPlayer = AudioPlayer.Sington
     
-    
-    
     private init() {
         NotificationCenter.default.addObserver(self, selector: #selector(audioPlayChangeFile(_:)), name: AudioPlayer.audioPlayChangeFileNotification, object: AudioPlayer.Sington)
     }
