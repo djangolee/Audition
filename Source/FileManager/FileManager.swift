@@ -142,7 +142,12 @@ extension FileManager {
     public func scan() -> [FileInfo]? {
         return scanDirectory(FileManager.Home)
     }
+}
+
+extension FileManager.FileInfo : Equatable {
     
-    
-    
+    public static func == (lhs: FileManager.FileInfo, rhs: FileManager.FileInfo) -> Bool {
+        return lhs.path == rhs.path
+    }
+
 }

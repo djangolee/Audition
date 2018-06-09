@@ -21,24 +21,65 @@ class LibraryTableViewCell: UITableViewCell {
     internal let describeLabel = UILabel()
     internal let playControl = PlayControl()
     
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
+        NotificationCenter.default.addObserver(self, selector: #selector(audioPlayChangeProgress(_:)), name: AudioPlayer.audioPlayChangeProgressNotification, object: AudioPlayer.Sington)
+        NotificationCenter.default.addObserver(self, selector: #selector(audioPlayChangeState(_:)), name: AudioPlayer.audioPlayChangeStateNotification, object: AudioPlayer.Sington)
+        NotificationCenter.default.addObserver(self, selector: #selector(audioPlayChangeFile(_:)), name: AudioPlayer.audioPlayChangeFileNotification, object: AudioPlayer.Sington)
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
+    
     public func render(_ file: FileManager.FileInfo) {
         self.file = file
         iconImageView.image = file.fileIcon
         fileNameLable.text = file.name
         describeLabel.text = file.des
-        playControl.playState = .pause
-        playControl.isHidden = true
+        
+        if file == AudioPlayer.Sington.source {
+            playControl.progress = CGFloat(AudioPlayer.Sington.currentTime / AudioPlayer.Sington.duration)
+            playControl.playState = file == AudioPlayer.Sington.source ? .play : .pause
+            playControl.isHidden = false
+        } else {
+            playControl.progress = 0
+            playControl.playState = .pause
+            playControl.isHidden = true
+        }
     }
     
     @objc private func onClickPlayControl(_ sender: PlayControl) {
-        switch sender.playState {
-        case .prepare:
-            sender.playState = .play
-        case .play:
-            sender.playState = .pause
-        case .pause:
-            sender.playState = .prepare
+        guard let file = file
+            else { return }
+        
+        if file != AudioPlayer.Sington.source {
+            AudioPlayer.Sington.play(file)
         }
+        
+        if AudioPlayer.Sington.state == .playing {
+            AudioPlayer.Sington.suspend()
+        } else {
+            AudioPlayer.Sington.resume()
+        }
+    }
+    
+    @objc private func audioPlayChangeProgress(_ sender: NSNotification) {
+        if file == AudioPlayer.Sington.source {
+            playControl.progress = CGFloat(AudioPlayer.Sington.currentTime / AudioPlayer.Sington.duration)
+        }
+    }
+    
+    @objc private func audioPlayChangeState(_ sender: NSNotification) {
+        playControl.playState = (AudioPlayer.Sington.state == .playing && file == AudioPlayer.Sington.source) ? .play : .pause
+    }
+    
+    @objc private func audioPlayChangeFile(_ sender: NSNotification) {
+        playControl.isHidden = file != AudioPlayer.Sington.source
     }
 }
 

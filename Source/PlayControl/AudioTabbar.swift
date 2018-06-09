@@ -57,7 +57,7 @@ class AudioTabbar: UIToolbar {
     }
     
     private func setupNameLabel() {
-        nameLabel.text = "Name Name Name Name Name Name...."
+        nameLabel.text = "Not Playing"
         nameLabel.font = .systemFont(ofSize: 15)
         addSubview(nameLabel)
     }

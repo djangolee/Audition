@@ -12,6 +12,7 @@
 		603C7AFC20C588A900C21DD2 /* UIImage+Icon.swift in Sources */ = {isa = PBXBuildFile; fileRef = 603C7AF720C588A900C21DD2 /* UIImage+Icon.swift */; };
 		603C7AFD20C588A900C21DD2 /* UIFont+Icon.swift in Sources */ = {isa = PBXBuildFile; fileRef = 603C7AF820C588A900C21DD2 /* UIFont+Icon.swift */; };
 		603C7AFF20C588A900C21DD2 /* String+Icon.swift in Sources */ = {isa = PBXBuildFile; fileRef = 603C7AFB20C588A900C21DD2 /* String+Icon.swift */; };
+		609E004820CBC7A30070F2CA /* AudioPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 609E004720CBC7A30070F2CA /* AudioPlayer.swift */; };
 		60B13C7E20C6C7A3007A7AC6 /* FileManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60B13C7D20C6C7A3007A7AC6 /* FileManager.swift */; };
 		60B5BA3A20CABF0E0062CA1B /* PlayControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60B5BA3820CABF0E0062CA1B /* PlayControl.swift */; };
 		60B5BA3B20CABF0E0062CA1B /* PlayControlLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60B5BA3920CABF0E0062CA1B /* PlayControlLayer.swift */; };
@@ -28,6 +29,7 @@
 		603C7AF720C588A900C21DD2 /* UIImage+Icon.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIImage+Icon.swift"; sourceTree = "<group>"; };
 		603C7AF820C588A900C21DD2 /* UIFont+Icon.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIFont+Icon.swift"; sourceTree = "<group>"; };
 		603C7AFB20C588A900C21DD2 /* String+Icon.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "String+Icon.swift"; sourceTree = "<group>"; };
+		609E004720CBC7A30070F2CA /* AudioPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioPlayer.swift; sourceTree = "<group>"; };
 		60B13C7D20C6C7A3007A7AC6 /* FileManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileManager.swift; sourceTree = "<group>"; };
 		60B5BA3820CABF0E0062CA1B /* PlayControl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayControl.swift; sourceTree = "<group>"; };
 		60B5BA3920CABF0E0062CA1B /* PlayControlLayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayControlLayer.swift; sourceTree = "<group>"; };
@@ -90,6 +92,14 @@
 			path = Resource;
 			sourceTree = "<group>";
 		};
+		609E004620CBC78C0070F2CA /* Player */ = {
+			isa = PBXGroup;
+			children = (
+				609E004720CBC7A30070F2CA /* AudioPlayer.swift */,
+			);
+			path = Player;
+			sourceTree = "<group>";
+		};
 		60B13C7C20C6C770007A7AC6 /* FileManager */ = {
 			isa = PBXGroup;
 			children = (
@@ -129,6 +139,7 @@
 		60B8F54120C56F1300053098 /* Source */ = {
 			isa = PBXGroup;
 			children = (
+				609E004620CBC78C0070F2CA /* Player */,
 				60B5BA3720CABF0E0062CA1B /* PlayControl */,
 				6034FF4F20C966FB00A3D3C5 /* Library */,
 				60B13C7C20C6C770007A7AC6 /* FileManager */,
@@ -290,6 +301,7 @@
 			files = (
 				60B8F54320C56F1300053098 /* AppDelegate.swift in Sources */,
 				6034FF5120C9671400A3D3C5 /* LibraryViewController.swift in Sources */,
+				609E004820CBC7A30070F2CA /* AudioPlayer.swift in Sources */,
 				603C7AFC20C588A900C21DD2 /* UIImage+Icon.swift in Sources */,
 				60B13C7E20C6C7A3007A7AC6 /* FileManager.swift in Sources */,
 				60B5BA3D20CABF610062CA1B /* AudioTabbar.swift in Sources */,
