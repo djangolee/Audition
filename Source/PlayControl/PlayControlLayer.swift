@@ -35,8 +35,8 @@ public class PlayControlLayer: CALayer {
     }
     
     public var progress: CGFloat {
-        get { return progressLayer.strokeStart }
-        set { progressLayer.strokeStart = newValue }
+        get { return progressLayer.strokeEnd }
+        set { progressLayer.strokeEnd = newValue }
     }
 }
 
@@ -62,16 +62,16 @@ extension PlayControlLayer {
         let inner = PlayControlLayer.innerSize
         
         outerCircle.frame.size = CGSize(width: outer, height: outer)
-        outerCircle.cornerRadius = outerCircle.frame.width / 2
+        outerCircle.cornerRadius = outer / 2
         
         innerCircle.frame.size = CGSize(width: inner, height: inner)
-        innerCircle.cornerRadius = innerCircle.frame.width / 2
+        innerCircle.cornerRadius = inner / 2
         
         prepareState.frame.size = CGSize(width: outer, height: outer)
-        prepareState.cornerRadius = prepareState.frame.width / 2
+        prepareState.cornerRadius = outer / 2
         
         progressLayer.frame.size = CGSize(width: outer, height: outer)
-        progressLayer.cornerRadius = progressLayer.frame.width / 2
+        progressLayer.cornerRadius = outer / 2
     
         let lineWidth: CGFloat = outer / 2
         let rect = CGRect(x: lineWidth / 2, y: lineWidth / 2, width: prepareState.bounds.width - lineWidth, height: prepareState.bounds.height - lineWidth)
@@ -166,7 +166,7 @@ extension PlayControlLayer {
         innerCircle.addSublayer(controlIcon)
         
         progressLayer.strokeColor = black
-        progressLayer.strokeEnd = 1
+        progressLayer.strokeStart = 0
         outerCircle.addSublayer(progressLayer)
     }
     
