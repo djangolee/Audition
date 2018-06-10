@@ -10,6 +10,8 @@ import UIKit
 
 class AudioTabbar: UIVisualEffectView {
     
+    private let playlist = AudioPlayerList.default
+    
     private let icon = UIImageView(image: UIImage(named: "AudioIcon"))
     private let nameLabel = UILabel()
     private let nextItem = UIButton()
@@ -17,26 +19,13 @@ class AudioTabbar: UIVisualEffectView {
     
     init() {
         super.init(effect: UIBlurEffect(style: .light))
-        NotificationCenter.default.addObserver(self, selector: #selector(audioPlayChangeProgress(_:)), name: AudioPlayer.audioPlayChangeProgressNotification, object: AudioPlayer.Sington)
-        NotificationCenter.default.addObserver(self, selector: #selector(audioPlayChangeState(_:)), name: AudioPlayer.audioPlayChangeStateNotification, object: AudioPlayer.Sington)
-        NotificationCenter.default.addObserver(self, selector: #selector(audioPlayChangeFile(_:)), name: AudioPlayer.audioPlayChangeFileNotification, object: AudioPlayer.Sington)
+        NotificationCenter.default.addObserver(self, selector: #selector(audioPlayChangeProgress(_:)), name: AudioPlayer.audioPlayChangeProgressNotification, object: playlist.audioPlayer)
+        NotificationCenter.default.addObserver(self, selector: #selector(audioPlayChangeState(_:)), name: AudioPlayer.audioPlayChangeStateNotification, object: playlist.audioPlayer)
+        NotificationCenter.default.addObserver(self, selector: #selector(audioPlayChangeFile(_:)), name: AudioPlayer.audioPlayChangeFileNotification, object: playlist.audioPlayer)
     }
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-    
-    override func safeAreaInsetsDidChange() {
-        super.safeAreaInsetsDidChange()
-        invalidateIntrinsicContentSize()
-    }
-
-    override func sizeThatFits(_ size: CGSize) -> CGSize {
-        return CGSize(width: UIScreen.main.bounds.width, height: safeAreaInsets.bottom)
-    }
-
-    override var intrinsicContentSize: CGSize {
-        return sizeThatFits(.zero)
     }
     
     @objc private func audioPlayChangeProgress(_ sender: NSNotification) {
@@ -44,27 +33,50 @@ class AudioTabbar: UIVisualEffectView {
     }
     
     @objc private func audioPlayChangeState(_ sender: NSNotification) {
-        playItem.setTitle(String(AudioPlayer.Sington.isPlaying ? .pause : .play), for: .normal)
+        playItem.setTitle(String(playlist.isPlaying ? .pause : .play), for: .normal)
     }
     
     @objc private func audioPlayChangeFile(_ sender: NSNotification) {
-        nameLabel.text = AudioPlayer.Sington.source?.name
+        nameLabel.text = playlist.currentSource?.name
     }
     
     @objc private func onClickNext(_ sender: UIControl) {
-        
+        playlist.next()
     }
     
     @objc private func onClickPlay(_ sender: UIControl) {
-        if AudioPlayer.Sington.isPlaying {
-            AudioPlayer.Sington.suspend()
+        if playlist.isPlaying {
+            playlist.suspend()
         } else {
-            AudioPlayer.Sington.resume()
+            playlist.resume()
         }
     }
 }
 
 extension AudioTabbar {
+    
+    static let TabBarHeight: CGFloat = 65
+    
+    override var safeAreaInsets: UIEdgeInsets {
+            return UIEdgeInsets.init(top: 5, left: 25, bottom: 5, right: 25)
+    }
+    
+    override func safeAreaInsetsDidChange() {
+        super.safeAreaInsetsDidChange()
+        invalidateIntrinsicContentSize()
+    }
+    
+    override func sizeThatFits(_ size: CGSize) -> CGSize {
+        guard let _ = superview
+            else {
+                return CGSize.zero;
+        }
+        return CGSize(width: UIScreen.main.bounds.width, height: AudioTabbar.TabBarHeight + safeAreaInsets.bottom)
+    }
+    
+    override var intrinsicContentSize: CGSize {
+        return sizeThatFits(.zero)
+    }
     
     override func jo_viewDidLoad() {
         super.jo_viewDidLoad()
@@ -82,9 +94,8 @@ extension AudioTabbar {
     override func jo_makeSubviewsLayout() {
         super.jo_makeSubviewsLayout()
         icon.snp.makeConstraints { maker in
-            maker.width.height.equalTo(40)
-            maker.top.equalToSuperview().offset(5)
-            maker.leading.equalToSuperview().offset(20)
+            maker.width.height.equalTo(49)
+            maker.top.leading.equalToSuperview().inset(safeAreaInsets)
         }
         nameLabel.snp.makeConstraints { (maker) in
             maker.centerY.equalTo(icon)
@@ -93,7 +104,7 @@ extension AudioTabbar {
         }
         nextItem.snp.makeConstraints { maker in
             maker.centerY.equalTo(icon)
-            maker.trailing.equalToSuperview().offset(-25)
+            maker.trailing.equalToSuperview().inset(safeAreaInsets)
         }
         playItem.snp.makeConstraints { maker in
             maker.centerY.equalTo(icon)
@@ -116,7 +127,6 @@ extension AudioTabbar {
     }
     
     private func setupNextItem() {
-        nextItem.isEnabled = false
         nextItem.titleLabel?.font = UIFont(icon: 28)
         nextItem.setTitle(String(.next), for: .normal)
         nextItem.setTitleColor(.black, for: .normal)
@@ -126,7 +136,7 @@ extension AudioTabbar {
     
     private func setupPlayItem() {
         playItem.titleLabel?.font = UIFont(icon: 28)
-        playItem.setTitle(String(AudioPlayer.Sington.isPlaying ? .pause : .play), for: .normal)
+        playItem.setTitle(String(playlist.isPlaying ? .pause : .play), for: .normal)
         playItem.setTitleColor(.black, for: .normal)
         playItem.addTarget(self, action: #selector(onClickPlay(_:)), for: .touchUpInside)
         contentView.addSubview(playItem)

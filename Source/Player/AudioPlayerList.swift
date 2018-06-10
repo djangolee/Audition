@@ -19,7 +19,7 @@ public class AudioPlayerList {
     static let `default` = AudioPlayerList()
     
     public let audioPlayer = AudioPlayer()
-    public var playmode: PlayMode = .repeatAll
+    public var playmode: PlayMode = .repeatSingle
     
     private(set) var playlist: [FileManager.FileInfo]? = nil {
         didSet {
@@ -38,47 +38,48 @@ public class AudioPlayerList {
     private var repeatAllist: [FileManager.FileInfo] = []
     private var repeatSinglelist: [FileManager.FileInfo] = []
     
+    
+    public var state: AudioPlayer.State { return audioPlayer.state }
+    public var isPlaying: Bool { return audioPlayer.isPlaying }
+    public var duration: TimeInterval { return audioPlayer.duration }
+    public var currentTime: TimeInterval { return audioPlayer.currentTime }
+    
     public var currentSource: FileManager.FileInfo? {
         return audioPlayer.source
     }
     
     public init() {
-        NotificationCenter.default.addObserver(self, selector: #selector(audioPlayChangeFile(_:)), name: AudioPlayer.audioPlayChangeFileNotification, object: audioPlayer)
+        NotificationCenter.default.addObserver(self, selector: #selector(audioPlayChangeState(_:)), name: AudioPlayer.audioPlayChangeStateNotification, object: audioPlayer)
     }
     
     deinit {
         NotificationCenter.default.removeObserver(self)
     }
     
-    @objc private func audioPlayChangeFile(_ sender: NSNotification) {
-        
-        if let source = audioPlayer.source {
-            repeatSinglelist = [source]
-        } else {
-            repeatSinglelist = []
-        }
-        
+    @objc private func audioPlayChangeState(_ sender: NSNotification) {
         switch (audioPlayer.state, playmode) {
         case (.completed(let error), .repeatSingle) where error == nil:
             seek(to: 0)
-        default:
+        case (.completed(_), _):
             next()
+        default:
+            break
         }
     }
     
     public func play(_ file: FileManager.FileInfo) {
         guard file.isSound
             else { return }
-        
+
         playlist = playlist ?? []
         playlist?.append(file)
-        play(file)
+        _paly(file)
     }
     
     public func play(_ list: [FileManager.FileInfo], index: Int = 0) {
         playlist = list.filter { $0.isSound }
         if let first = playlist?.first {
-            play(first)
+            _paly(first)
         }
     }
     
@@ -88,15 +89,17 @@ public class AudioPlayerList {
             temp.insert(file, at: 0)
         }
         playlist = temp.filter { $0.isSound }
-        play(file)
+        _paly(file)
     }
     
     public func previous() {
         check(by: -1)
+        resume()
     }
     
     public func next() {
         check(by: 1)
+        resume()
     }
     
     public func resume() {
@@ -115,7 +118,7 @@ public class AudioPlayerList {
         audioPlayer.seek(to:time)
     }
     
-    private func paly(_ file: FileManager.FileInfo) {
+    private func _paly(_ file: FileManager.FileInfo) {
         guard file.isSound
             else {
                 return
@@ -132,7 +135,7 @@ public class AudioPlayerList {
         
         guard let currentSource = currentSource
             else {
-                play(first)
+                _paly(first)
                 return
         }
         
@@ -151,13 +154,12 @@ public class AudioPlayerList {
             }
             index += 1
         }
-        
         index += offset
         if index >= list.count {
             index = 0
         } else if index < 0 {
             index = list.count - 1
         }
-        play(list[index])
+        _paly(list[index])
     }
 }

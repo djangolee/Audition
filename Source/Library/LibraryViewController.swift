@@ -33,7 +33,6 @@ class LibraryNavigationController: UINavigationController {
     override func jo_viewDidInstallSubviews() {
         super.jo_viewDidInstallSubviews()
         navigationBar.prefersLargeTitles = true
-        additionalSafeAreaInsets.bottom = 55;
     }
     
     override func jo_setupSubviews() {
@@ -44,14 +43,19 @@ class LibraryNavigationController: UINavigationController {
     override func jo_makeSubviewsLayout() {
         super.jo_makeSubviewsLayout()
         
+        let height = view.safeAreaInsets.bottom + AudioTabbar.TabBarHeight
+        additionalSafeAreaInsets.bottom += AudioTabbar.TabBarHeight
+        
         audioTabbar.snp.makeConstraints { maker in
             maker.centerX.equalToSuperview()
             maker.bottomMargin.equalToSuperview()
             maker.width.equalToSuperview()
+            maker.height.equalTo(height)
         }
     }
     
     private func setupAudioTabbar() {
+        audioTabbar.contentView.jo.setSeparator(.top)
         view.addSubview(audioTabbar)
     }
 }
@@ -100,22 +104,20 @@ extension LibraryViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        guard let cell = tableView.cellForRow(at: indexPath) as? LibraryTableViewCell,
-            selectedIndexPath != indexPath
+        guard let cell = tableView.cellForRow(at: indexPath) as? LibraryTableViewCell
             else { return }
 
+        cell.setSelected(false, animated: true)
+        
         if let selectedIndexPath = selectedIndexPath,
-            let selectedCell = tableView.cellForRow(at: selectedIndexPath) as? LibraryTableViewCell,
-            AudioPlayer.Sington.source != selectedCell.file {
-            
+            let selectedCell = tableView.cellForRow(at: selectedIndexPath) as? LibraryTableViewCell {
             selectedCell.playControl.isHidden = true
         }
-        
-        cell.setSelected(false, animated: true)
+
         let file = source[indexPath.item]
         if let source = file.contentsOfDirectory(), source.count > 0 {
             navigationController?.pushViewController(LibraryViewController(source, title: file.name), animated: true)
-        } else if file.isSound, AudioPlayer.Sington.source != file {
+        } else if file.isSound {
             selectedIndexPath = indexPath
             cell.playControl.isHidden = false
         }

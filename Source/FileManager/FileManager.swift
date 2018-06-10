@@ -66,6 +66,11 @@ extension FileManager {
             return FileManager.default.scanDirectory(path)
         }
         
+        func siblingAudio() -> [FileInfo] {
+            let siblinglist = FileManager.default.scanSibling(self) ?? [self]
+            return siblinglist.filter { $0.isSound }
+        }
+        
         var dateString: String {
             if let date = date {
                 let formater = DateFormatter()
@@ -115,6 +120,21 @@ extension FileManager {
     public private(set) static var Home = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).first!
     #endif
     
+    public func scan() -> [FileInfo]? {
+        return scanDirectory(FileManager.Home)
+    }
+    
+    public func scanSibling(_ sibling: FileInfo) -> [FileInfo]? {
+        var path = sibling.path
+        let url = URL(fileURLWithPath: sibling.path)
+        guard let range = path.range(of: url.lastPathComponent)
+            else {
+                return [sibling]
+        }
+        path.removeSubrange(range)
+        return scanDirectory(path)
+    }
+    
     public func scanDirectory(_ path: String) -> [FileInfo]? {
         
         return try? contentsOfDirectory(atPath: path)
@@ -138,16 +158,12 @@ extension FileManager {
                 return false;
             })
     }
-    
-    public func scan() -> [FileInfo]? {
-        return scanDirectory(FileManager.Home)
-    }
 }
 
 extension FileManager.FileInfo : Equatable {
     
     public static func == (lhs: FileManager.FileInfo, rhs: FileManager.FileInfo) -> Bool {
-        return lhs.path == rhs.path
+        return lhs.name == rhs.name && lhs.pathExtension == rhs.pathExtension && lhs.size == rhs.size && lhs.date == rhs.date
     }
 
 }

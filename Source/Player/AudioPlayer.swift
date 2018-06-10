@@ -28,9 +28,9 @@ public class AudioPlayer: NSObject {
     
     public static let Sington = AudioPlayer()
     
-    public var source: FileManager.FileInfo?
+    fileprivate (set) var source: FileManager.FileInfo?
     
-    public var state: State = .stop {
+    fileprivate (set) var state: State = .stop {
         didSet { NotificationCenter.default.post(name: AudioPlayer.audioPlayChangeStateNotification, object: self) }
     }
     
@@ -61,7 +61,7 @@ public class AudioPlayer: NSObject {
         audioPlayer?.delegate = self
         audioPlayer?.prepareToPlay()
         
-        timer = Timer(timeInterval: 1 / 20.0, target: self, selector: #selector(timeRunloop(_:)), userInfo: nil, repeats: true)
+        timer = Timer(timeInterval: 0.5, target: self, selector: #selector(timeRunloop(_:)), userInfo: nil, repeats: true)
         RunLoop.main.add(timer!, forMode: .commonModes)
         
         NotificationCenter.default.post(name: AudioPlayer.audioPlayChangeFileNotification, object: self)
@@ -82,7 +82,7 @@ public class AudioPlayer: NSObject {
             else { return self }
         
         audioPlayer.currentTime = time
-        
+        resume()
         return self
     }
     
