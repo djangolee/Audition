@@ -40,7 +40,7 @@ public class AudioPlayer: NSObject {
     
     // MARK: Private
     
-    private override init() {
+    public override init() {
         super.init()
         AudioPlayer.setActive(true)
     }

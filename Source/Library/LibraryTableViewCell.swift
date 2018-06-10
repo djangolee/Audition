@@ -58,6 +58,7 @@ class LibraryTableViewCell: UITableViewCell {
             else { return }
         
         if file != AudioPlayer.Sington.source {
+            
             AudioPlayer.Sington.play(file)
         }
         
