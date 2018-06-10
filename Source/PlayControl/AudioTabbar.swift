@@ -12,10 +12,11 @@ class AudioTabbar: UIVisualEffectView {
     
     private let playlist = AudioPlayerList.default
     
-    private let icon = UIImageView(image: UIImage(named: "AudioIcon"))
-    private let nameLabel = UILabel()
     private let nextItem = UIButton()
     private let playItem = UIButton()
+    
+    public let icon = UIImageView(image: UIImage(named: "AudioIcon"))
+    public let nameLabel = UILabel()
     
     init() {
         super.init(effect: UIBlurEffect(style: .light))

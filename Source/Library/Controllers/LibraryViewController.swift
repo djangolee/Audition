@@ -8,60 +8,7 @@
 
 import UIKit
 
-class LibraryNavigationController: UINavigationController {
-    
-    private let audioTabbar = AudioTabbar()
-    
-    init() {
-        let roor = LibraryViewController.init(FileManager.default.scan() ?? [], title: "Documents")
-        super.init(rootViewController: roor)
-    }
-    
-    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
-        super.init(nibName: nil, bundle: nil)
-    }
-    
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        view.backgroundColor = .white
-    }
-    
-    override func jo_viewDidInstallSubviews() {
-        super.jo_viewDidInstallSubviews()
-        navigationBar.prefersLargeTitles = true
-    }
-    
-    override func jo_setupSubviews() {
-        super.jo_setupSubviews()
-        setupAudioTabbar()
-    }
-    
-    override func jo_makeSubviewsLayout() {
-        super.jo_makeSubviewsLayout()
-        
-        let height = view.safeAreaInsets.bottom + AudioTabbar.TabBarHeight
-        additionalSafeAreaInsets.bottom += AudioTabbar.TabBarHeight
-        
-        audioTabbar.snp.makeConstraints { maker in
-            maker.centerX.equalToSuperview()
-            maker.bottomMargin.equalToSuperview()
-            maker.width.equalToSuperview()
-            maker.height.equalTo(height)
-        }
-    }
-    
-    private func setupAudioTabbar() {
-        audioTabbar.contentView.jo.setSeparator(.top)
-        view.addSubview(audioTabbar)
-    }
-}
-
-
-private class LibraryViewController: UIViewController {
+internal class LibraryViewController: UIViewController {
 
     private let source: [FileManager.FileInfo]
     
