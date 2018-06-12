@@ -45,6 +45,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
     }
 
+    func beginReceivingRemoteControlEvents() {
+        print(#function)
+    }
+    
+    func endReceivingRemoteControlEvents() {
+        print(#function)
+    }
 
 }
 

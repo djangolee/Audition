@@ -45,13 +45,12 @@ class LibraryNavigationController: UINavigationController {
     }
     
     func showProgress(_ progress: CGFloat) {
-        let offset = max(min(progress, 1), 0)
-        
-        print(offset)
+//        let offset = max(min(progress, 1), 0)
+//        print(offset)
     }
     
     @objc private func onPanTabbar(_ sender: UIPanGestureRecognizer) {
-        
+        print(#function)
         let  translation = panGesture.translation(in: view)
         switch sender.state {
         case .possible, .began, .changed:
@@ -64,6 +63,10 @@ class LibraryNavigationController: UINavigationController {
             break
         }
     }
+    
+    @objc private func onClickTabbar(_ sender: UIControl) {
+        print(#function)
+    }
 }
 
 extension LibraryNavigationController : UIGestureRecognizerDelegate {
@@ -73,7 +76,7 @@ extension LibraryNavigationController : UIGestureRecognizerDelegate {
             else { return true }
 
         let translation = panGesture.translation(in: view)
-        guard translation.y < -2
+        guard translation.y < -3
             else { return false }
     
         return true
@@ -110,8 +113,9 @@ extension LibraryNavigationController {
     private func setupAudioTabbar() {
         panGesture.addTarget(self, action: #selector(onPanTabbar(_:)))
         panGesture.delegate = self
-        audioTabbar.contentView.jo.setSeparator(.top)
         audioTabbar.contentView.addGestureRecognizer(panGesture)
+        audioTabbar.contentItem.addTarget(self, action: #selector(onClickTabbar(_:)), for: .touchUpInside)
+        audioTabbar.contentView.jo.setSeparator(.top)
         view.addSubview(audioTabbar)
     }
 }

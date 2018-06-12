@@ -17,6 +17,7 @@ class AudioTabbar: UIVisualEffectView {
     
     public let icon = UIImageView(image: UIImage(named: "AudioIcon"))
     public let nameLabel = UILabel()
+    public let contentItem = UIButton()
     
     init() {
         super.init(effect: UIBlurEffect(style: .light))
@@ -52,6 +53,14 @@ class AudioTabbar: UIVisualEffectView {
             playlist.resume()
         }
     }
+    
+    @objc private func onClickContentItem(_ sender: UIControl) {
+        UIView .animate(withDuration: 0.15, animations: {
+            self.setSelected(true, animated: false)
+        }) { _ in
+            self.setSelected(false, animated: true)
+        }
+    }
 }
 
 extension AudioTabbar {
@@ -79,35 +88,21 @@ extension AudioTabbar {
         return sizeThatFits(.zero)
     }
     
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        super.touchesBegan(touches, with: event)
-        
-        UIView .animate(withDuration: 0.25, animations: {
-            self.setSelected(true, animated: false)
-        }) { _ in
-            self.setSelected(false, animated: true)
-        }
-    }
-    
     func setSelected(_ selected: Bool, animated: Bool) {
         
         let color = selected ? UIColor(white: 0.8, alpha: 0.5) : .white
         if animated {
-            UIView.animate(withDuration: 0.35) {
+            UIView.animate(withDuration: 0.15) {
                 self.contentView.backgroundColor = color
             }
         } else {
             self.contentView.backgroundColor = color;
         }
     }
-    
-    override func jo_viewDidLoad() {
-        super.jo_viewDidLoad()
-        
-    }
 
     override func jo_setupSubviews() {
         super.jo_setupSubviews()
+        setupContentView()
         setupIcon()
         setupNameLabel()
         setupNextItem()
@@ -116,6 +111,9 @@ extension AudioTabbar {
     
     override func jo_makeSubviewsLayout() {
         super.jo_makeSubviewsLayout()
+        contentItem.snp.makeConstraints { maker in
+            maker.edges.equalToSuperview()
+        }
         icon.snp.makeConstraints { maker in
             maker.width.height.equalTo(49)
             maker.top.leading.equalToSuperview().inset(safeAreaInsets)
@@ -135,6 +133,11 @@ extension AudioTabbar {
         }
         nameLabel.setContentHuggingPriority(.required, for: .horizontal)
         nameLabel.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
+    }
+ 
+    private func setupContentView() {
+        contentItem.addTarget(self, action: #selector(onClickContentItem(_:)), for: .touchDown)
+        contentView.addSubview(contentItem)
     }
     
     private func setupIcon() {

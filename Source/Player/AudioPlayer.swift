@@ -42,8 +42,15 @@ public class AudioPlayer: NSObject {
     
     public override init() {
         super.init()
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(audioSessionInterruption(_:)), name: AVAudioSession.interruptionNotification, object: nil)
         AudioPlayer.setActive(true)
     }
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
+    
     private var audioPlayer: AVAudioPlayer?
     private var timer: Timer?
     
@@ -74,6 +81,27 @@ public class AudioPlayer: NSObject {
             else { return }
         
         NotificationCenter.default.post(name: AudioPlayer.audioPlayChangeProgressNotification, object: self)
+    }
+    
+    @objc private func audioSessionInterruption(_ sender: Notification) {
+        
+        guard let interruptionTypeNumber = sender.userInfo?[AVAudioSessionInterruptionTypeKey] as? NSNumber,
+            let interruptionType = AVAudioSession.InterruptionType(rawValue: interruptionTypeNumber.uintValue)
+            else {
+                return
+        }
+        
+        switch interruptionType {
+        case .began:
+            suspend()
+        case .ended:
+            if let optionsNumber = sender.userInfo?[AVAudioSessionInterruptionOptionKey] as? NSNumber {
+                let options = AVAudioSession.InterruptionOptions(rawValue: optionsNumber.uintValue)
+                if options.contains(.shouldResume) {
+                    resume()
+                }
+            }
+        }
     }
     
     @discardableResult
