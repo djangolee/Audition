@@ -10,7 +10,7 @@ import UIKit
 
 class LibraryNavigationController: UINavigationController {
     
-    private let audioTabbar = AudioTabbar()
+    internal let audioTabbar = AudioTabbar()
     private let panGesture = UIPanGestureRecognizer()
     
     private var topInsert: CGFloat = 55
@@ -31,6 +31,7 @@ class LibraryNavigationController: UINavigationController {
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
+        
         topDistance = view.frame.height - topInsert - audioTabbar.frame.height
     }
     
@@ -68,14 +69,13 @@ class LibraryNavigationController: UINavigationController {
 extension LibraryNavigationController : UIGestureRecognizerDelegate {
     
     func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
-        
         guard gestureRecognizer === panGesture
             else { return true }
 
         let translation = panGesture.translation(in: view)
         guard translation.y < -2
             else { return false }
-        
+    
         return true
     }
 }

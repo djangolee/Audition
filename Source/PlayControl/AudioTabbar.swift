@@ -79,6 +79,28 @@ extension AudioTabbar {
         return sizeThatFits(.zero)
     }
     
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        super.touchesBegan(touches, with: event)
+        
+        UIView .animate(withDuration: 0.25, animations: {
+            self.setSelected(true, animated: false)
+        }) { _ in
+            self.setSelected(false, animated: true)
+        }
+    }
+    
+    func setSelected(_ selected: Bool, animated: Bool) {
+        
+        let color = selected ? UIColor(white: 0.8, alpha: 0.5) : .white
+        if animated {
+            UIView.animate(withDuration: 0.35) {
+                self.contentView.backgroundColor = color
+            }
+        } else {
+            self.contentView.backgroundColor = color;
+        }
+    }
+    
     override func jo_viewDidLoad() {
         super.jo_viewDidLoad()
         
