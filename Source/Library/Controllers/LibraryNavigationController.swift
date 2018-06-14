@@ -16,6 +16,8 @@ class LibraryNavigationController: UINavigationController {
     private var topInsert: CGFloat = 55
     private var topDistance: CGFloat = 0
     
+    private let transitioning = LibraryTransitioning()
+    
     init() {
         let roor = LibraryViewController.init(FileManager.default.scan() ?? [], title: "Documents")
         super.init(rootViewController: roor)
@@ -65,7 +67,9 @@ class LibraryNavigationController: UINavigationController {
     }
     
     @objc private func onClickTabbar(_ sender: UIControl) {
-        print(#function)
+        let playVC = PlaylistViewController()
+        playVC.transitioningDelegate = transitioning
+        present(playVC, animated: true, completion: nil)
     }
 }
 

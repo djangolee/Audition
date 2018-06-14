@@ -121,7 +121,9 @@ extension AudioTabbar {
         nameLabel.snp.makeConstraints { (maker) in
             maker.centerY.equalTo(icon)
             maker.leading.equalTo(icon.snp.trailing).offset(10)
-            maker.trailing.lessThanOrEqualTo(playItem.snp.leading).offset(-10)
+            var width = safeAreaInsets.left + 49 + 10 + nextItem.sizeThatFits(CGSize.zero).width + playItem.sizeThatFits(CGSize.zero).width + safeAreaInsets.right + 15 + 10
+            width = UIScreen.main.bounds.width - width
+            maker.width.equalTo(width)
         }
         nextItem.snp.makeConstraints { maker in
             maker.centerY.equalTo(icon)
@@ -143,13 +145,13 @@ extension AudioTabbar {
     private func setupIcon() {
         icon.clipsToBounds = true;
         icon.layer.cornerRadius = 3
-        contentView.addSubview(icon)
+        contentItem.addSubview(icon)
     }
     
     private func setupNameLabel() {
-        nameLabel.text = "Not Playing"
+        nameLabel.text = playlist.currentSource?.name ?? "Not Playing"
         nameLabel.font = .systemFont(ofSize: 15)
-        contentView.addSubview(nameLabel)
+        contentItem.addSubview(nameLabel)
     }
     
     private func setupNextItem() {
@@ -157,7 +159,7 @@ extension AudioTabbar {
         nextItem.setTitle(String(.next), for: .normal)
         nextItem.setTitleColor(.black, for: .normal)
         nextItem.addTarget(self, action: #selector(onClickNext(_:)), for: .touchUpInside)
-        contentView.addSubview(nextItem)
+        contentItem.addSubview(nextItem)
     }
     
     private func setupPlayItem() {
@@ -165,6 +167,6 @@ extension AudioTabbar {
         playItem.setTitle(String(playlist.isPlaying ? .pause : .play), for: .normal)
         playItem.setTitleColor(.black, for: .normal)
         playItem.addTarget(self, action: #selector(onClickPlay(_:)), for: .touchUpInside)
-        contentView.addSubview(playItem)
+        contentItem.addSubview(playItem)
     }
 }
