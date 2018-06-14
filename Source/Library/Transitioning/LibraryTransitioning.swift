@@ -31,7 +31,7 @@ class LibraryTransitioning: NSObject, UIViewControllerTransitioningDelegate, UIV
     //MARK: UIViewControllerAnimatedTransitioning
     
     func transitionDuration(using transitionContext: UIViewControllerContextTransitioning?) -> TimeInterval {
-        return 11
+        return 3
     }
     
     func animateTransition(using transitionContext: UIViewControllerContextTransitioning) {

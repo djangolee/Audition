@@ -25,6 +25,7 @@ class PlaylistViewController: UIViewController {
     private let playboardView = UIView()
     private let foldItem = ArrowFoldItem()
     private let coverImageView = UIImageView(image: UIImage(named: "AudioIcon"))
+    private let progressView = UIProgressView()
     
     init(_ tabbarSize: CGSize) {
         super.init(nibName: nil, bundle: nil)
@@ -49,21 +50,35 @@ extension PlaylistViewController {
     public func didSetStyle() {
         playboardView.addSubview(audioTabbar)
         playboardView.addSubview(coverImageView)
+        playboardView.addSubview(progressView)
+        
         switch style {
         case .fold:
             audioTabbar.alpha = 1
             foldItem.alpha = 0
+            progressView.alpha = 0.1
             coverImageView.snp.remakeConstraints { maker in
                 maker.edges.equalTo(audioTabbar.icon)
+            }
+            progressView.snp.remakeConstraints { maker in
+                maker.leading.equalToSuperview().inset(25)
+                maker.width.equalTo(UIScreen.main.bounds.width - 50)
+                maker.top.equalTo(coverImageView.snp.bottom).offset(10)
             }
             break
         case .unfold:
             audioTabbar.alpha = 0
             foldItem.alpha = 1
+            progressView.alpha = 1
             let width = UIScreen.main.bounds.width - 62 * 2
             coverImageView.snp.remakeConstraints { maker in
                 maker.width.height.equalTo(width)
                 maker.top.leading.equalToSuperview().inset(62)
+            }
+            progressView.snp.remakeConstraints { maker in
+                maker.leading.equalToSuperview().inset(25)
+                maker.width.equalTo(UIScreen.main.bounds.width - 50)
+                maker.top.equalTo(coverImageView.snp.bottom).offset(62)
             }
             break
         }
@@ -76,6 +91,7 @@ extension PlaylistViewController {
         setupAudioTabbar()
         setupFoldItem()
         setupCover()
+        setupProgressView()
     }
     
     override func jo_makeSubviewsLayout() {
@@ -117,5 +133,9 @@ extension PlaylistViewController {
         coverImageView.clipsToBounds = true
         coverImageView.layer.cornerRadius = 5
         playboardView.addSubview(coverImageView)
+    }
+    
+    private func setupProgressView() {
+        playboardView.addSubview(progressView)
     }
 }
