@@ -10,13 +10,30 @@ import UIKit
 
 class PlaylistViewController: UIViewController {
 
-    private let foldItem = ArrowFoldItem()
-    private let audioTabbar = AudioTabbar()
-    private let backgroundView = UIView()
-    private let contentView = UIView()
-    private let playboardView = UIView()
+    enum Style {
+        case fold
+        case unfold
+    }
+    
+    public var style: Style = .unfold {
+        didSet { didSetStyle() }
+    }
+    
+    public let audioTabbar = AudioTabbar()
+    
     private let tableView = UITableView()
+    private let playboardView = UIView()
+    private let foldItem = ArrowFoldItem()
     private let coverImageView = UIImageView(image: UIImage(named: "AudioIcon"))
+    
+    init(_ tabbarSize: CGSize) {
+        super.init(nibName: nil, bundle: nil)
+        audioTabbar.bounds.size = tabbarSize
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return .lightContent
@@ -29,15 +46,31 @@ class PlaylistViewController: UIViewController {
 
 extension PlaylistViewController {
     
-    override func jo_viewDidInstallSubviews() {
-        super.jo_viewDidInstallSubviews()
-//        view.backgroundColor = .white
+    public func didSetStyle() {
+        playboardView.addSubview(audioTabbar)
+        playboardView.addSubview(coverImageView)
+        switch style {
+        case .fold:
+            audioTabbar.alpha = 1
+            foldItem.alpha = 0
+            coverImageView.snp.remakeConstraints { maker in
+                maker.edges.equalTo(audioTabbar.icon)
+            }
+            break
+        case .unfold:
+            audioTabbar.alpha = 0
+            foldItem.alpha = 1
+            let width = UIScreen.main.bounds.width - 62 * 2
+            coverImageView.snp.remakeConstraints { maker in
+                maker.width.height.equalTo(width)
+                maker.top.leading.equalToSuperview().inset(62)
+            }
+            break
+        }
     }
     
     override func jo_setupSubviews() {
         super.jo_setupSubviews()
-        setupBackgroundView()
-        setupContentView()
         setupTableView()
         setupPlayboardView()
         setupAudioTabbar()
@@ -47,52 +80,19 @@ extension PlaylistViewController {
     
     override func jo_makeSubviewsLayout() {
         super.jo_makeSubviewsLayout()
-        
-        backgroundView.snp.makeConstraints { maker in
-            maker.edges.equalToSuperview()
-        }
-
-        contentView.snp.makeConstraints { maker in
-            maker.edges.equalToSuperview().inset(UIEdgeInsets(top: 55, left: 0, bottom: 0, right: 0))
-        }
-
+    
         tableView.snp.makeConstraints { maker in
             maker.edges.equalToSuperview()
-        }
-        
-        audioTabbar.snp.makeConstraints { maker in
-            maker.centerX.equalToSuperview()
-            maker.top.equalToSuperview()
-            maker.width.equalToSuperview()
-            maker.height.equalTo(AudioTabbar.TabBarHeight)
         }
         
         foldItem.snp.makeConstraints { maker in
             maker.centerX.equalToSuperview()
             maker.top.equalToSuperview()
         }
-        
-        coverImageView.snp.makeConstraints { maker in
-            maker.top.leading.equalToSuperview().inset(62)
-            maker.width.equalTo(UIScreen.main.bounds.width - 62 * 2)
-            maker.height.equalTo(coverImageView.snp.width)
-        }
-    }
-    
-    private func setupBackgroundView() {
-//        backgroundView.backgroundColor = .black
-        view.addSubview(backgroundView)
-    }
-    
-    private func setupContentView() {
-        contentView.clipsToBounds = true
-        contentView.layer.cornerRadius = 8
-        contentView.backgroundColor = .white
-        backgroundView.addSubview(contentView)
     }
     
     private func setupTableView() {
-        contentView.addSubview(tableView)
+        view.addSubview(tableView)
     }
     
     private func setupPlayboardView() {
@@ -103,6 +103,8 @@ extension PlaylistViewController {
     
     private func setupAudioTabbar() {
         audioTabbar.contentView.jo.setSeparator(.top)
+        audioTabbar.frame.origin = .zero
+        audioTabbar.icon.isHidden = true
         playboardView.addSubview(audioTabbar)
     }
 

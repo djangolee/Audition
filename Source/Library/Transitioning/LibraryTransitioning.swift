@@ -10,8 +10,10 @@ import UIKit
 
 class LibraryTransitioning: NSObject, UIViewControllerTransitioningDelegate, UIViewControllerAnimatedTransitioning {
     
-    private var backgroundView = UIView()
+    private var blackboardView = UIView()
     private var snapshotView = UIView()
+    private var maskingView = UIView()
+    
     private var isDismiss = false
     
     //MARK: UIViewControllerAnimatedTransitioning
@@ -29,10 +31,21 @@ class LibraryTransitioning: NSObject, UIViewControllerTransitioningDelegate, UIV
     //MARK: UIViewControllerAnimatedTransitioning
     
     func transitionDuration(using transitionContext: UIViewControllerContextTransitioning?) -> TimeInterval {
-        return 10
+        return 11
     }
     
     func animateTransition(using transitionContext: UIViewControllerContextTransitioning) {
+        if isDismiss {
+            dismissAnimateTransition(using: transitionContext)
+        } else {
+            presentAnimateTransition(using: transitionContext)
+        }
+    }
+    
+    func presentAnimateTransition(using transitionContext: UIViewControllerContextTransitioning) {
+        guard let playlistViewController = transitionContext.viewController(forKey: .to) as? PlaylistViewController else {
+            return
+        }
         
         guard let fromView = transitionContext.view(forKey: .from),
             let toView = transitionContext.view(forKey: .to) else {
@@ -42,38 +55,86 @@ class LibraryTransitioning: NSObject, UIViewControllerTransitioningDelegate, UIV
         
         let containerView = transitionContext.containerView
         
-        if isDismiss {
+        blackboardView.frame = containerView.bounds
+        blackboardView.backgroundColor = .black
+        containerView.addSubview(blackboardView)
+        
+        snapshotView = fromView.snapshotView(afterScreenUpdates: true) ?? snapshotView
+        snapshotView.transform = CGAffineTransform(scaleX: 1, y: 1)
+        snapshotView.frame = containerView.bounds
+        snapshotView.clipsToBounds = true
+        snapshotView.layer.cornerRadius = 8
+        containerView.addSubview(snapshotView)
+        
+        maskingView.alpha = 0
+        maskingView.backgroundColor = .black
+        maskingView.frame = containerView.bounds
+        containerView.addSubview(maskingView)
+        
+        toView.clipsToBounds = true
+        toView.layer.cornerRadius = 8
+        toView.frame.size = CGSize(width: containerView.frame.width, height: containerView.frame.height - 55)
+        toView.frame.origin.y = containerView.bounds.height - playlistViewController.audioTabbar.frame.height
+        containerView.addSubview(toView)
+        
+        playlistViewController.style = .fold
+        playlistViewController.audioTabbar.isHidden = false
+        playlistViewController.view.layoutIfNeeded()
+        
+        UIView.animate(withDuration: transitionDuration(using: transitionContext), animations: {
+            
+            playlistViewController.style = .unfold
+            playlistViewController.view.layoutIfNeeded()
+            
+            toView.frame.origin.y = 55
+            self.maskingView.alpha = 0.3
+            self.snapshotView.frame.origin.y = 15
+            self.snapshotView.transform = CGAffineTransform(scaleX: 0.94, y: 0.94)
+        }) { _ in
+            playlistViewController.audioTabbar.isHidden = true
             transitionContext.completeTransition(true)
-            backgroundView.removeFromSuperview()
-            snapshotView.removeFromSuperview()
-            fromView.removeFromSuperview()
-        } else {
+        }
+        
+    }
+    
+    func dismissAnimateTransition(using transitionContext: UIViewControllerContextTransitioning) {
+        guard let playlistViewController = transitionContext.viewController(forKey: .from) as? PlaylistViewController else {
             
-            snapshotView = fromView.snapshotView(afterScreenUpdates: true) ?? snapshotView
-            snapshotView.clipsToBounds = true
-            snapshotView.transform = CGAffineTransform()
-            snapshotView.frame = containerView.bounds
-            snapshotView.center.y += 20
-            containerView.addSubview(snapshotView)
+            transitionContext.completeTransition(true)
+            self.blackboardView.removeFromSuperview()
+            self.snapshotView.removeFromSuperview()
+            self.maskingView.removeFromSuperview()
+            return
+        }
+        
+        guard let fromView = transitionContext.view(forKey: .from) else {
             
-            backgroundView.alpha = 0.5
-            backgroundView.backgroundColor = .black
-            backgroundView.frame = containerView.bounds
-            containerView.addSubview(backgroundView)
+            transitionContext.completeTransition(true)
+            self.blackboardView.removeFromSuperview()
+            self.snapshotView.removeFromSuperview()
+            self.maskingView.removeFromSuperview()
+                return
+        }
+        
+        let containerView = transitionContext.containerView
+        
+        playlistViewController.style = .unfold
+        playlistViewController.audioTabbar.isHidden = false
+        playlistViewController.view.layoutIfNeeded()
+        UIView.animate(withDuration: transitionDuration(using: transitionContext), animations: {
             
-            toView.frame.size = containerView.bounds.size
-            toView.frame.origin.y = containerView.bounds.height
-            containerView.addSubview(toView)
+            playlistViewController.style = .fold
+            playlistViewController.view.layoutIfNeeded()
             
-            UIView.animate(withDuration: transitionDuration(using: transitionContext), animations: {
-                toView.frame.origin.y = 0
-//                self.backgroundView.alpha = 0.3
-//                self.snapshotView.frame.origin.y = 20
-                self.snapshotView.transform = CGAffineTransform(scaleX: 0.8, y: 0.8)
-            }) { _ in
-                transitionContext.completeTransition(true)
-                containerView.insertSubview(fromView, belowSubview: self.backgroundView)
-            }
+            fromView.frame.origin.y = containerView.bounds.height - playlistViewController.audioTabbar.frame.height
+            self.maskingView.alpha = 0
+            self.snapshotView.transform = CGAffineTransform(scaleX: 1, y: 1)
+            self.snapshotView.frame.origin.y = 1
+        }) { _ in
+            transitionContext.completeTransition(true)
+            self.blackboardView.removeFromSuperview()
+            self.snapshotView.removeFromSuperview()
+            self.maskingView.removeFromSuperview()
         }
     }
     

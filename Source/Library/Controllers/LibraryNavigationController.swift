@@ -67,7 +67,7 @@ class LibraryNavigationController: UINavigationController {
     }
     
     @objc private func onClickTabbar(_ sender: UIControl) {
-        let playVC = PlaylistViewController()
+        let playVC = PlaylistViewController.init(audioTabbar.frame.size)
         playVC.transitioningDelegate = transitioning
         present(playVC, animated: true, completion: nil)
     }
