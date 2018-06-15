@@ -1,10 +1,10 @@
 PODS:
   - JoUIKit (0.0.10)
-  - Realm (3.7.1):
-    - Realm/Headers (= 3.7.1)
-  - Realm/Headers (3.7.1)
-  - RealmSwift (3.7.1):
-    - Realm (= 3.7.1)
+  - Realm (3.7.2):
+    - Realm/Headers (= 3.7.2)
+  - Realm/Headers (3.7.2)
+  - RealmSwift (3.7.2):
+    - Realm (= 3.7.2)
   - SnapKit (4.0.0)
 
 DEPENDENCIES:
@@ -21,8 +21,8 @@ SPEC REPOS:
 
 SPEC CHECKSUMS:
   JoUIKit: 11ca8c3f4398e540619608800b2ec00959abe6a5
-  Realm: 906be37d52f17f25484ac01643a7f26a9d3bfbd5
-  RealmSwift: 1c2b6bae3dc55bb87e080ffa96537d71442f6dce
+  Realm: dd18c3014e8d90df300b83c6da740067436089c5
+  RealmSwift: 79917cae59a0c43ef8118b233a5978891dd50b4a
   SnapKit: a42d492c16e80209130a3379f73596c3454b7694
 
 PODFILE CHECKSUM: 91c1dbd9d12a9a9898e24d717f3ebbd88efe4755

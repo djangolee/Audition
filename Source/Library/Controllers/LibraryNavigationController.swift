@@ -42,32 +42,29 @@ class LibraryNavigationController: UINavigationController {
         view.backgroundColor = .white
     }
     
-    func hideenProgress(_ progress: CGFloat) {
-        
-    }
-    
-    func showProgress(_ progress: CGFloat) {
-//        let offset = max(min(progress, 1), 0)
-//        print(offset)
-    }
-    
     @objc private func onPanTabbar(_ sender: UIPanGestureRecognizer) {
-        print(#function)
+        
         let  translation = panGesture.translation(in: view)
+        let progress = translation.y < 0 ? abs(translation.y) / topDistance : 0
+        
         switch sender.state {
-        case .possible, .began, .changed:
-            if translation.y < 0 {
-                showProgress(abs(translation.y) / topDistance)
-            }
+        case .possible:
             break
+        case  .began:
+            transitioning.isInteraction = true
+            let playVC = PlaylistViewController(audioTabbar.frame.size)
+            playVC.transitioningDelegate = transitioning
+            present(playVC, animated: true, completion: nil)
+        case .changed:
+            transitioning.update(progress)
         case .ended, .cancelled, .failed:
-            showProgress(0)
-            break
+            progress > 0.3 ? transitioning.finish() : transitioning.cancel()
         }
     }
     
     @objc private func onClickTabbar(_ sender: UIControl) {
-        let playVC = PlaylistViewController.init(audioTabbar.frame.size)
+        transitioning.isInteraction = false
+        let playVC = PlaylistViewController(audioTabbar.frame.size)
         playVC.transitioningDelegate = transitioning
         present(playVC, animated: true, completion: nil)
     }

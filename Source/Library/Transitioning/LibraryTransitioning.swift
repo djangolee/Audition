@@ -8,7 +8,9 @@
 
 import UIKit
 
-class LibraryTransitioning: NSObject, UIViewControllerTransitioningDelegate, UIViewControllerAnimatedTransitioning {
+class LibraryTransitioning: UIPercentDrivenInteractiveTransition, UIViewControllerTransitioningDelegate, UIViewControllerAnimatedTransitioning {
+    
+    public var isInteraction: Bool = false
     
     private var blackboardView = UIView()
     private var snapshotView = UIView()
@@ -28,20 +30,32 @@ class LibraryTransitioning: NSObject, UIViewControllerTransitioningDelegate, UIV
         return self
     }
     
+    func interactionControllerForPresentation(using animator: UIViewControllerAnimatedTransitioning) -> UIViewControllerInteractiveTransitioning? {
+        return isInteraction ? self : nil;
+    }
+    
+    func interactionControllerForDismissal(using animator: UIViewControllerAnimatedTransitioning) -> UIViewControllerInteractiveTransitioning? {
+        return nil //isInteraction ? self : nil;
+    }
+    
     //MARK: UIViewControllerAnimatedTransitioning
     
     func transitionDuration(using transitionContext: UIViewControllerContextTransitioning?) -> TimeInterval {
-        return 3
+        return 0.35
     }
     
     func animateTransition(using transitionContext: UIViewControllerContextTransitioning) {
         if isDismiss {
-            dismissAnimateTransition(using: transitionContext)
+            isInteraction ? dismissInteractionAnimateTransition(using: transitionContext) : dismissAnimateTransition(using: transitionContext)
         } else {
-            presentAnimateTransition(using: transitionContext)
+            isInteraction ? presentInteractionAnimateTransition(using: transitionContext) : presentAnimateTransition(using: transitionContext)
         }
     }
     
+    func presentInteractionAnimateTransition(using transitionContext: UIViewControllerContextTransitioning) {
+        self.presentAnimateTransition(using: transitionContext)
+    }
+        
     func presentAnimateTransition(using transitionContext: UIViewControllerContextTransitioning) {
         guard let playlistViewController = transitionContext.viewController(forKey: .to) as? PlaylistViewController else {
             return
@@ -49,7 +63,7 @@ class LibraryTransitioning: NSObject, UIViewControllerTransitioningDelegate, UIV
         
         guard let fromView = transitionContext.view(forKey: .from),
             let toView = transitionContext.view(forKey: .to) else {
-                transitionContext.completeTransition(true)
+                transitionContext.completeTransition(!transitionContext.transitionWasCancelled)
                 return
         }
         
@@ -92,15 +106,18 @@ class LibraryTransitioning: NSObject, UIViewControllerTransitioningDelegate, UIV
             self.snapshotView.transform = CGAffineTransform(scaleX: 0.94, y: 0.94)
         }) { _ in
             playlistViewController.audioTabbar.isHidden = true
-            transitionContext.completeTransition(true)
+            transitionContext.completeTransition(!transitionContext.transitionWasCancelled)
         }
-        
+    }
+    
+    func dismissInteractionAnimateTransition(using transitionContext: UIViewControllerContextTransitioning) {
+        self.dismissAnimateTransition(using: transitionContext)
     }
     
     func dismissAnimateTransition(using transitionContext: UIViewControllerContextTransitioning) {
         guard let playlistViewController = transitionContext.viewController(forKey: .from) as? PlaylistViewController else {
             
-            transitionContext.completeTransition(true)
+            transitionContext.completeTransition(!transitionContext.transitionWasCancelled)
             self.blackboardView.removeFromSuperview()
             self.snapshotView.removeFromSuperview()
             self.maskingView.removeFromSuperview()
@@ -108,8 +125,7 @@ class LibraryTransitioning: NSObject, UIViewControllerTransitioningDelegate, UIV
         }
         
         guard let fromView = transitionContext.view(forKey: .from) else {
-            
-            transitionContext.completeTransition(true)
+            transitionContext.completeTransition(!transitionContext.transitionWasCancelled)
             self.blackboardView.removeFromSuperview()
             self.snapshotView.removeFromSuperview()
             self.maskingView.removeFromSuperview()
@@ -131,11 +147,10 @@ class LibraryTransitioning: NSObject, UIViewControllerTransitioningDelegate, UIV
             self.snapshotView.transform = CGAffineTransform(scaleX: 1, y: 1)
             self.snapshotView.frame.origin.y = 1
         }) { _ in
-            transitionContext.completeTransition(true)
+            transitionContext.completeTransition(!transitionContext.transitionWasCancelled)
             self.blackboardView.removeFromSuperview()
             self.snapshotView.removeFromSuperview()
             self.maskingView.removeFromSuperview()
         }
     }
-    
 }
