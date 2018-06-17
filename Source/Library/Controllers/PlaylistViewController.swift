@@ -27,6 +27,8 @@ class PlaylistViewController: UIViewController {
     private let coverImageView = UIImageView(image: UIImage(named: "AudioIcon"))
     private let progressView = UIProgressView()
     
+    private let panRecognizer = UIPanGestureRecognizer()
+    
     init(_ tabbarSize: CGSize) {
         super.init(nibName: nil, bundle: nil)
         audioTabbar.bounds.size = tabbarSize
@@ -43,9 +45,64 @@ class PlaylistViewController: UIViewController {
     @objc private func onClickFlodItem(_ sender: UIControl) {
         dismiss(animated: true, completion: nil)
     }
+    
+    @objc private func onPanRecognizer(_ sender: UIPanGestureRecognizer) {
+        
+        guard let transitioning = self.transitioningDelegate as? LibraryTransitioning else {
+            return
+        }
+        
+        guard let tableView = sender.view as? UITableView, tableView == self.tableView else {
+            return
+        }
+        
+        switch sender.state {
+        case .possible, .began:
+            break
+        case .changed:
+            if tableView.adjustedContentInset.top + tableView.contentOffset.y <= 0 {
+                if !transitioning.isInteraction {
+                    transitioning.isInteraction = true
+                    foldItem.direction = .flat
+                    dismiss(animated: true, completion: nil)
+                }
+                if transitioning.isInteraction {
+                    let offsetY = sender.translation(in: sender.view).y
+                    let progress = offsetY / tableView.frame.height / 2.2
+                    transitioning.update(progress)
+                    tableView.bounces = false
+                }
+            } else {
+                transitioning.update(0)
+                tableView.bounces = true
+                foldItem.direction = .down
+                transitioning.isInteraction = false
+            }
+            break
+        case .ended, .cancelled:
+            tableView.bounces = true
+            foldItem.direction = .down
+            transitioning.isInteraction = false
+            
+            transitioning.percentComplete > 0.2 ? transitioning.finish() : transitioning.cancel()
+            break
+        case .failed:
+            tableView.bounces = true
+            foldItem.direction = .down
+            transitioning.isInteraction = false
+            
+            transitioning.cancel()
+            break
+        }
+    }
 }
 
-extension PlaylistViewController {
+
+extension PlaylistViewController : UIGestureRecognizerDelegate {
+    
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+        return true
+    }
     
     public func didSetStyle() {
         playboardView.addSubview(audioTabbar)
@@ -82,6 +139,13 @@ extension PlaylistViewController {
             }
             break
         }
+    }
+    
+    override func jo_viewDidInstallSubviews() {
+        super.jo_viewDidInstallSubviews()
+        panRecognizer.addTarget(self, action: #selector(onPanRecognizer(_:)))
+        panRecognizer.delegate = self
+        tableView.addGestureRecognizer(panRecognizer)
     }
     
     override func jo_setupSubviews() {

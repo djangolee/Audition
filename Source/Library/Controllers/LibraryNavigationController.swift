@@ -77,7 +77,7 @@ extension LibraryNavigationController : UIGestureRecognizerDelegate {
             else { return true }
 
         let translation = panGesture.translation(in: view)
-        guard translation.y < -3
+        guard translation.y < -1
             else { return false }
     
         return true
