@@ -93,16 +93,16 @@ class LibraryTransitioning: UIPercentDrivenInteractiveTransition, UIViewControll
         toView.clipsToBounds = true
         toView.layer.cornerRadius = 8
         toView.frame.size = CGSize(width: containerView.frame.width, height: containerView.frame.height - 55)
-        toView.frame.origin.y = containerView.bounds.height - playlistViewController.audioTabbar.frame.height
+        toView.frame.origin.y = containerView.bounds.height - playlistViewController.playboardView.audioTabbar.frame.height
         containerView.addSubview(toView)
         
-        playlistViewController.style = .fold
-        playlistViewController.audioTabbar.isHidden = false
+        playlistViewController.playboardView.style = .fold
+        playlistViewController.playboardView.audioTabbar.isHidden = false
         playlistViewController.view.layoutIfNeeded()
         
         UIView.animate(withDuration: transitionDuration(using: transitionContext), animations: {
             
-            playlistViewController.style = .unfold
+            playlistViewController.playboardView.style = .unfold
             playlistViewController.view.layoutIfNeeded()
             
             toView.frame.origin.y = 55
@@ -110,7 +110,7 @@ class LibraryTransitioning: UIPercentDrivenInteractiveTransition, UIViewControll
             self.snapshotView.transform = CGAffineTransform(scaleX: 0.94, y: 0.94)
             self.snapshotView.frame.origin.y = 40
         }) { _ in
-            playlistViewController.audioTabbar.isHidden = true
+            playlistViewController.playboardView.audioTabbar.isHidden = true
             transitionContext.completeTransition(!transitionContext.transitionWasCancelled)
         }
     }
@@ -139,8 +139,8 @@ class LibraryTransitioning: UIPercentDrivenInteractiveTransition, UIViewControll
         
         let containerView = transitionContext.containerView
         
-        playlistViewController.style = .unfold
-        playlistViewController.audioTabbar.isHidden = false
+        playlistViewController.playboardView.style = .unfold
+        playlistViewController.playboardView.audioTabbar.isHidden = false
         playlistViewController.view.layoutIfNeeded()
         
         UIView.animateKeyframes(withDuration: transitionDuration(using: transitionContext), delay: 0, options: .layoutSubviews, animations: {
@@ -150,10 +150,10 @@ class LibraryTransitioning: UIPercentDrivenInteractiveTransition, UIViewControll
                 self.snapshotView.frame.origin.y = 15
             })
             UIView.addKeyframe(withRelativeStartTime: 0.5, relativeDuration: 1, animations: {
-                playlistViewController.style = .fold
+                playlistViewController.playboardView.style = .fold
                 playlistViewController.view.layoutIfNeeded()
                 
-                fromView.frame.origin.y = containerView.bounds.height - playlistViewController.audioTabbar.frame.height
+                fromView.frame.origin.y = containerView.bounds.height - playlistViewController.playboardView.audioTabbar.frame.height
                 self.maskingView.alpha = 0
                 
                 self.snapshotView.transform = CGAffineTransform(scaleX: 1, y: 1)
@@ -166,7 +166,7 @@ class LibraryTransitioning: UIPercentDrivenInteractiveTransition, UIViewControll
                 self.snapshotView.removeFromSuperview()
                 self.maskingView.removeFromSuperview()
             } else {
-                playlistViewController.style = .unfold
+                playlistViewController.playboardView.style = .unfold
             }
         }
     }
@@ -191,15 +191,15 @@ class LibraryTransitioning: UIPercentDrivenInteractiveTransition, UIViewControll
         
         let containerView = transitionContext.containerView
         
-        playlistViewController.style = .unfold
-        playlistViewController.audioTabbar.isHidden = false
+        playlistViewController.playboardView.style = .unfold
+        playlistViewController.playboardView.audioTabbar.isHidden = false
         playlistViewController.view.layoutIfNeeded()
         UIView.animate(withDuration: transitionDuration(using: transitionContext), animations: {
             
-            playlistViewController.style = .fold
+            playlistViewController.playboardView.style = .fold
             playlistViewController.view.layoutIfNeeded()
             
-            fromView.frame.origin.y = containerView.bounds.height - playlistViewController.audioTabbar.frame.height
+            fromView.frame.origin.y = containerView.bounds.height - playlistViewController.playboardView.audioTabbar.frame.height
             self.maskingView.alpha = 0
             self.snapshotView.transform = CGAffineTransform(scaleX: 1, y: 1)
             self.snapshotView.frame.origin.y = 0
@@ -210,7 +210,7 @@ class LibraryTransitioning: UIPercentDrivenInteractiveTransition, UIViewControll
                 self.snapshotView.removeFromSuperview()
                 self.maskingView.removeFromSuperview()
             } else {
-                playlistViewController.style = .unfold
+                playlistViewController.playboardView.style = .unfold
             }
         }
     }
