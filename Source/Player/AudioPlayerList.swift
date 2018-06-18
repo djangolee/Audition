@@ -38,7 +38,6 @@ public class AudioPlayerList {
     private var repeatAllist: [FileManager.FileInfo] = []
     private var repeatSinglelist: [FileManager.FileInfo] = []
     
-    
     public var state: AudioPlayer.State { return audioPlayer.state }
     public var isPlaying: Bool { return audioPlayer.isPlaying }
     public var duration: TimeInterval { return audioPlayer.duration }

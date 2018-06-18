@@ -93,9 +93,10 @@ extension PlaylistViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.jo.dequeueReusableCell(UITableViewCell.self)!
-        cell.textLabel?.text = playlist.playlist?[indexPath.item].name
-        cell.textLabel?.textColor = UIColor.init(red: 252 / 256.0, green: 47 / 256.0, blue: 85 / 256.0, alpha: 1)
+        let cell = tableView.jo.dequeueReusableCell(PlaylistTableViewCell.self) as! PlaylistTableViewCell
+        if let file = playlist.playlist?[indexPath.item] {
+            cell.render(file)
+        }
         return cell
     }
     
@@ -104,6 +105,10 @@ extension PlaylistViewController: UITableViewDelegate, UITableViewDataSource {
             else { return }
 
         cell.setSelected(false, animated: true)
+        if let file = playlist.playlist?[indexPath.item], file.isSound {
+            playlist.play(file.siblingAudio(), file: file)
+            playlist.audioPlayer.resume()
+        }
     }
 }
 
@@ -153,14 +158,14 @@ extension PlaylistViewController : UIGestureRecognizerDelegate {
     private func setupTableView() {
         tableView.delegate = self
         tableView.dataSource = self
-        tableView.jo.register(cell: UITableViewCell.self)
+        tableView.showsVerticalScrollIndicator = false
+        tableView.jo.register(cell: PlaylistTableViewCell.self)
         view.addSubview(tableView)
     }
     
     private func setupPlayboardView() {
-        playboardView.frame.size = playboardView.sizeThatFits(CGSize.zero)
         playboardView.foldItem.addTarget(self, action: #selector(onClickFlodItem(_:)), for: .touchUpInside)
-        tableView.tableHeaderView = playboardView
+        tableView.addSubview(playboardView)
     }
     
 }

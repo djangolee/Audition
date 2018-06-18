@@ -56,7 +56,19 @@ class PlayboardView: UIView {
     }
     
     override func sizeThatFits(_ size: CGSize) -> CGSize {
-        return CGSize.init(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height - 55 - 38 - 20)
+        let width = UIScreen.main.bounds.width - 62 * 2
+        var height = width + 62
+        height += progressSlider.sizeThatFits(size).height + 62
+        height += currentTimeLabel.sizeThatFits(size).height + 10
+        height += nameLabel.sizeThatFits(size).height + 40
+        height += playItem.sizeThatFits(size).height + 30
+        height += slider.sizeThatFits(size).height + 15
+        height += 20
+        return CGSize.init(width: UIScreen.main.bounds.width, height: height)
+    }
+    
+    override func sizeToFit() {
+        frame.size = sizeThatFits(CGSize.zero)
     }
     
     required init?(coder aDecoder: NSCoder) {
