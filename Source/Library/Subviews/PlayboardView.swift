@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import MediaPlayer
 
 class PlayboardView: UIView {
     
@@ -24,7 +25,8 @@ class PlayboardView: UIView {
     public let audioTabbar = AudioTabbar()
     public let foldItem = ArrowFoldItem()
     public let coverImageView = UIImageView(image: UIImage(named: "AudioIcon"))
-    public let progressView = UIProgressView()
+    
+    public let progressSlider = UISlider()
     
     private let currentTimeLabel = UILabel()
     private let durationLabel = UILabel()
@@ -34,23 +36,32 @@ class PlayboardView: UIView {
     private let nextItem = UIButton()
     private let playItem = UIButton()
     
+    public let slider = UISlider()
+    private var volumeViewSlider: UISlider?
+    private let volumeminLabel = UILabel()
+    private let volumemaxLabel = UILabel()
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         
         NotificationCenter.default.addObserver(self, selector: #selector(audioPlayChangeProgress(_:)), name: AudioPlayer.audioPlayChangeProgressNotification, object: playlist.audioPlayer)
         NotificationCenter.default.addObserver(self, selector: #selector(audioPlayChangeState(_:)), name: AudioPlayer.audioPlayChangeStateNotification, object: playlist.audioPlayer)
         NotificationCenter.default.addObserver(self, selector: #selector(audioPlayChangeFile(_:)), name: AudioPlayer.audioPlayChangeFileNotification, object: playlist.audioPlayer)
+        NotificationCenter.default.addObserver(self, selector: #selector(systemVolumeDidChange(_:)), name: NSNotification.Name(rawValue: "AVSystemController_SystemVolumeDidChangeNotification"), object: nil)
         
         addSubview(audioTabbar)
         addSubview(coverImageView)
-        addSubview(progressView)
+        addSubview(progressSlider)
         addSubview(foldItem)
+    }
+    
+    override func sizeThatFits(_ size: CGSize) -> CGSize {
+        return CGSize.init(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height - 55 - 38 - 20)
     }
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
     
     deinit {
         NotificationCenter.default.removeObserver(self)
@@ -72,8 +83,21 @@ class PlayboardView: UIView {
         }
     }
     
+    @objc private func onChangeVolume(_ sender: UIControl) {
+        volumeViewSlider?.value = slider.value
+        volumeViewSlider?.sendActions(for: .valueChanged)
+    }
+    
+    @objc private func onChangeProgress(_ sender: UIControl) {
+        playlist.seek(to: Double(progressSlider.value) * playlist.duration)
+    }
+    
     @objc private func audioPlayChangeProgress(_ sender: NSNotification) {
-        
+        if !progressSlider.isTracking {
+            currentTimeLabel.text = timeToString(playlist.currentTime)
+            durationLabel.text = timeToString(playlist.duration)
+            progressSlider.value = Float(playlist.currentTime / playlist.duration)
+        }
     }
     
     @objc private func audioPlayChangeState(_ sender: NSNotification) {
@@ -82,6 +106,19 @@ class PlayboardView: UIView {
     
     @objc private func audioPlayChangeFile(_ sender: NSNotification) {
         nameLabel.text = playlist.currentSource?.name
+    }
+    
+    @objc private func systemVolumeDidChange(_ sender: NSNotification) {
+        if let volume = sender.userInfo?["AVSystemController_AudioVolumeNotificationParameter"] as? NSNumber {
+            slider.value = volume.floatValue
+        }
+    }
+    
+    func timeToString(_ time: TimeInterval) -> String {
+        let date = Date.init(timeIntervalSince1970: time)
+        let format = DateFormatter()
+        format.dateFormat = "mm:ss"
+        return format.string(from: date)
     }
     
 }
@@ -94,13 +131,13 @@ extension PlayboardView {
         case .fold:
             audioTabbar.alpha = 1
             foldItem.alpha = 0
-            progressView.alpha = 0.1
+            progressSlider.alpha = 0.1
             currentTimeLabel.alpha = 0.1
             durationLabel.alpha = 0.1
             coverImageView.snp.remakeConstraints { maker in
                 maker.edges.equalTo(audioTabbar.icon)
             }
-            progressView.snp.remakeConstraints { maker in
+            progressSlider.snp.remakeConstraints { maker in
                 maker.leading.equalToSuperview().inset(25)
                 maker.width.equalTo(UIScreen.main.bounds.width - 50)
                 maker.top.equalTo(coverImageView.snp.bottom).offset(10)
@@ -109,7 +146,7 @@ extension PlayboardView {
         case .unfold:
             audioTabbar.alpha = 0
             foldItem.alpha = 1
-            progressView.alpha = 1
+            progressSlider.alpha = 1
             currentTimeLabel.alpha = 1
             durationLabel.alpha = 1
             let width = UIScreen.main.bounds.width - 62 * 2
@@ -117,7 +154,7 @@ extension PlayboardView {
                 maker.width.height.equalTo(width)
                 maker.top.leading.equalToSuperview().inset(62)
             }
-            progressView.snp.remakeConstraints { maker in
+            progressSlider.snp.remakeConstraints { maker in
                 maker.leading.equalToSuperview().inset(25)
                 maker.width.equalTo(UIScreen.main.bounds.width - 50)
                 maker.top.equalTo(coverImageView.snp.bottom).offset(62)
@@ -132,6 +169,8 @@ extension PlayboardView {
         setupCover()
         setupTimeLable()
         setupItem()
+        setupSlider()
+        setupProgress()
     }
     
     override func jo_makeSubviewsLayout() {
@@ -143,18 +182,18 @@ extension PlayboardView {
         }
         
         currentTimeLabel.snp.makeConstraints { maker in
-            maker.leading.equalTo(progressView).offset(-2)
-            maker.top.equalTo(progressView.snp.bottom).offset(10)
+            maker.leading.equalTo(progressSlider).offset(-2)
+            maker.top.equalTo(progressSlider.snp.bottom).offset(10)
         }
         
         durationLabel.snp.makeConstraints { maker in
-            maker.trailing.equalTo(progressView).offset(2)
-            maker.top.equalTo(progressView.snp.bottom).offset(10)
+            maker.trailing.equalTo(progressSlider).offset(2)
+            maker.top.equalTo(progressSlider.snp.bottom).offset(10)
         }
         
         nameLabel.snp.makeConstraints { maker in
             maker.centerX.equalToSuperview()
-            maker.top.equalTo(progressView.snp.bottom).offset(40)
+            maker.top.equalTo(progressSlider.snp.bottom).offset(40)
             maker.width.equalToSuperview().multipliedBy(0.8)
         }
         
@@ -172,6 +211,22 @@ extension PlayboardView {
             maker.centerY.equalTo(playItem)
             maker.trailing.equalTo(playItem.snp.leading).offset(-55)
         }
+        
+        slider.snp.makeConstraints { maker in
+            maker.centerX.equalToSuperview()
+            maker.top.equalTo(playItem.snp.bottom).offset(15)
+            maker.width.equalToSuperview().multipliedBy(0.78)
+        }
+        
+        volumeminLabel.snp.makeConstraints { maker in
+            maker.centerY.equalTo(slider)
+            maker.trailing.equalTo(slider.snp.leading).offset(-5)
+        }
+        
+        volumemaxLabel.snp.makeConstraints { maker in
+            maker.centerY.equalTo(slider)
+            maker.leading.equalTo(slider.snp.trailing).offset(5)
+        }
     }
     
     private func setupAudioTabbar() {
@@ -186,12 +241,12 @@ extension PlayboardView {
     }
     
     private func setupTimeLable() {
-        currentTimeLabel.font = .systemFont(ofSize: 14)
+        currentTimeLabel.font = .systemFont(ofSize: 13)
         currentTimeLabel.textColor = .lightGray
         currentTimeLabel.text = "--:--"
         addSubview(currentTimeLabel)
         
-        durationLabel.font = .systemFont(ofSize: 14)
+        durationLabel.font = .systemFont(ofSize: 13)
         durationLabel.textColor = .lightGray
         durationLabel.text = "--:--"
         addSubview(durationLabel)
@@ -223,6 +278,40 @@ extension PlayboardView {
         playItem.setTitleColor(.black, for: .normal)
         playItem.addTarget(self, action: #selector(onClickPlay(_:)), for: .touchUpInside)
         addSubview(playItem)
+    }
+    
+    private func setupProgress() {
+        progressSlider.isContinuous = false;
+        progressSlider.minimumTrackTintColor = UIColor(white: 0.35, alpha: 1)
+        progressSlider.value = Float(playlist.currentTime / playlist.duration)
+        progressSlider.addTarget(self, action: #selector(onChangeProgress(_:)), for: .valueChanged)
+        progressSlider.thumbTintColor = .clear
+        addSubview(progressSlider)
+    }
+    
+    private func setupSlider() {
+
+        volumeminLabel.font = UIFont(icon: 22)
+        volumeminLabel.text = String(.volumemin)
+        volumeminLabel.textColor = UIColor(white: 0.35, alpha: 1)
+        addSubview(volumeminLabel)
+        
+        volumemaxLabel.font = UIFont(icon: 22)
+        volumemaxLabel.text = String(.volumemax)
+        volumemaxLabel.textColor = UIColor(white: 0.35, alpha: 1)
+        addSubview(volumemaxLabel)
+        
+        slider.minimumTrackTintColor = UIColor(white: 0.35, alpha: 1)
+        slider.value = AVAudioSession.sharedInstance().outputVolume
+        slider.addTarget(self, action: #selector(onChangeVolume(_:)), for: .valueChanged)
+        addSubview(slider)
+        
+        let volumeViewnew = MPVolumeView()
+        for subview in volumeViewnew.subviews where NSStringFromClass(subview.classForCoder) == "MPVolumeSlider" {
+            if let volumeSlider = subview as? UISlider {
+                volumeViewSlider = volumeSlider
+            }
+        }
     }
     
 }

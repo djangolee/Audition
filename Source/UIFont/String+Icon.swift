@@ -16,6 +16,8 @@ extension String {
         case play = 0xe67f
         case pause = 0xe681
         case next = 0xe680
+        case volumemin = 0xe682
+        case volumemax = 0xe683
     }
     
     public init(_ icon: UnicodeIcon) {

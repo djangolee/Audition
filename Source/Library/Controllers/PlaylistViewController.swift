@@ -7,11 +7,13 @@
 //
 
 import UIKit
+import MediaPlayer
 
 class PlaylistViewController: UIViewController {
     
     private let tableView = UITableView()
     
+    private let playlist = AudioPlayerList.default
     public let playboardView = PlayboardView()
     
     private let panRecognizer = UIPanGestureRecognizer()
@@ -84,8 +86,40 @@ class PlaylistViewController: UIViewController {
     }
 }
 
+extension PlaylistViewController: UITableViewDelegate, UITableViewDataSource {
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return playlist.playlist?.count ?? 0
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.jo.dequeueReusableCell(UITableViewCell.self)!
+        cell.textLabel?.text = playlist.playlist?[indexPath.item].name
+        cell.textLabel?.textColor = UIColor.init(red: 252 / 256.0, green: 47 / 256.0, blue: 85 / 256.0, alpha: 1)
+        return cell
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        guard let cell = tableView.cellForRow(at: indexPath)
+            else { return }
+
+        cell.setSelected(false, animated: true)
+    }
+}
 
 extension PlaylistViewController : UIGestureRecognizerDelegate {
+    
+    func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
+
+        guard gestureRecognizer === panRecognizer
+            else { return true }
+        
+        let translation = panRecognizer.translation(in: view)
+        guard abs(translation.y) > abs(translation.x)
+            else { return false }
+        
+        return true
+    }
     
     func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
         return true
@@ -96,6 +130,10 @@ extension PlaylistViewController : UIGestureRecognizerDelegate {
         panRecognizer.addTarget(self, action: #selector(onPanRecognizer(_:)))
         panRecognizer.delegate = self
         tableView.addGestureRecognizer(panRecognizer)
+
+        let volumeView = MPVolumeView()
+        volumeView.center = CGPoint(x: 199999, y: 1999999)
+        view.addSubview(volumeView)
     }
     
     override func jo_setupSubviews() {
@@ -110,16 +148,17 @@ extension PlaylistViewController : UIGestureRecognizerDelegate {
         tableView.snp.makeConstraints { maker in
             maker.edges.equalToSuperview()
         }
-        
     }
     
     private func setupTableView() {
+        tableView.delegate = self
+        tableView.dataSource = self
+        tableView.jo.register(cell: UITableViewCell.self)
         view.addSubview(tableView)
     }
     
     private func setupPlayboardView() {
-        playboardView.bounds = tableView.bounds
-        playboardView.autoresizingMask = [.flexibleHeight, .flexibleHeight]
+        playboardView.frame.size = playboardView.sizeThatFits(CGSize.zero)
         playboardView.foldItem.addTarget(self, action: #selector(onClickFlodItem(_:)), for: .touchUpInside)
         tableView.tableHeaderView = playboardView
     }
