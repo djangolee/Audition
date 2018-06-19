@@ -11,12 +11,11 @@ import MediaPlayer
 
 class PlaylistViewController: UIViewController {
     
-    private let tableView = UITableView()
+    public let tableView = UITableView()
+    public let playboardView = PlayboardView()
+    private let maskLayer = CAShapeLayer()
     
     private let playlist = AudioPlayerList.default
-    public let playboardView = PlayboardView()
-    
-    private let panRecognizer = UIPanGestureRecognizer()
     
     init(_ tabbarSize: CGSize) {
         super.init(nibName: nil, bundle: nil)
@@ -34,59 +33,69 @@ class PlaylistViewController: UIViewController {
     @objc private func onClickFlodItem(_ sender: UIControl) {
         dismiss(animated: true, completion: nil)
     }
-    
-    @objc private func onPanRecognizer(_ sender: UIPanGestureRecognizer) {
-        
-        guard let transitioning = self.transitioningDelegate as? LibraryTransitioning else {
-            return
-        }
-        
-        guard let tableView = sender.view as? UITableView, tableView == self.tableView else {
-            return
-        }
-        
-        switch sender.state {
-        case .possible, .began:
-            break
-        case .changed:
-            if tableView.adjustedContentInset.top + tableView.contentOffset.y <= 0 {
-                if !transitioning.isInteraction {
-                    transitioning.isInteraction = true
-                    playboardView.foldItem.direction = .flat
-                    dismiss(animated: true, completion: nil)
-                }
-                if transitioning.isInteraction {
-                    let offsetY = sender.translation(in: sender.view).y
-                    let progress = offsetY / tableView.frame.height / 2.2
-                    transitioning.update(progress)
-                    tableView.bounces = false
-                }
-            } else {
-                transitioning.update(0)
-                tableView.bounces = true
-                playboardView.foldItem.direction = .down
-                transitioning.isInteraction = false
-            }
-            break
-        case .ended, .cancelled:
-            tableView.bounces = true
-            playboardView.foldItem.direction = .down
-            transitioning.isInteraction = false
-            
-            transitioning.percentComplete > 0.2 ? transitioning.finish() : transitioning.cancel()
-            break
-        case .failed:
-            tableView.bounces = true
-            playboardView.foldItem.direction = .down
-            transitioning.isInteraction = false
-            
-            transitioning.cancel()
-            break
-        }
-    }
 }
 
 extension PlaylistViewController: UITableViewDelegate, UITableViewDataSource {
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        
+        guard let transitioning = transitioningDelegate as? LibraryTransitioning,
+            scrollView.isTracking
+            else {
+                return
+        }
+        
+        let threshold: CGFloat = 350
+        let offsetY = min(tableView.adjustedContentInset.top + tableView.contentOffset.y, 0)
+        
+        if tableView.adjustedContentInset.top + tableView.contentOffset.y <= 0 {
+            CATransaction.begin()
+            CATransaction.setDisableActions(true)
+            maskLayer.frame.origin.y = scrollView.frame.origin.y + abs(offsetY)
+            CATransaction.commit()
+            playboardView.foldItem.direction = .flat
+        } else {
+//            CATransaction.begin()
+//            CATransaction.setDisableActions(true)
+//            maskLayer.frame.origin.y = 55
+//            CATransaction.commit()
+//            playboardView.foldItem.direction = .down
+        }
+        
+//        if scrollView.isTracking, offsetY < 0 {
+//            transitioning.isDismiss = true
+//            transitioning.dismissUpdate(min(1, abs(offsetY) / threshold))
+//        }
+     
+        if !scrollView.isTracking {
+
+//            playboardView.foldItem.direction = .down
+//            if maskLayer.frame.origin.y > 155 {
+//                dismiss(animated: true, completion: nil)
+//                transitioning.dismissFinish()
+//            } else {
+//                transitioning.dismissCancel()
+//            }
+        }
+    }
+    
+    func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
+        
+        CATransaction.begin()
+        CATransaction.setDisableActions(true)
+        
+        let offsetY = abs(scrollView.contentOffset.y) + scrollView.frame.origin.y
+        scrollView.contentOffset.y = 0
+        maskLayer.frame.origin.y = offsetY
+        tableView.snp.remakeConstraints { maker in
+            maker.top.equalToSuperview().offset(offsetY)
+            maker.leading.bottom.trailing.equalToSuperview()
+        }
+        view.layoutIfNeeded()
+        
+        CATransaction.commit()
+    }
+
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return playlist.playlist?.count ?? 0
@@ -114,27 +123,8 @@ extension PlaylistViewController: UITableViewDelegate, UITableViewDataSource {
 
 extension PlaylistViewController : UIGestureRecognizerDelegate {
     
-    func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
-
-        guard gestureRecognizer === panRecognizer
-            else { return true }
-        
-        let translation = panRecognizer.translation(in: view)
-        guard abs(translation.y) > abs(translation.x)
-            else { return false }
-        
-        return true
-    }
-    
-    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
-        return true
-    }
-    
     override func jo_viewDidInstallSubviews() {
         super.jo_viewDidInstallSubviews()
-        panRecognizer.addTarget(self, action: #selector(onPanRecognizer(_:)))
-        panRecognizer.delegate = self
-        tableView.addGestureRecognizer(panRecognizer)
 
         let volumeView = MPVolumeView()
         volumeView.center = CGPoint(x: 199999, y: 1999999)
@@ -145,13 +135,15 @@ extension PlaylistViewController : UIGestureRecognizerDelegate {
         super.jo_setupSubviews()
         setupTableView()
         setupPlayboardView()
+        setupMaskLayer()
     }
     
     override func jo_makeSubviewsLayout() {
         super.jo_makeSubviewsLayout()
     
         tableView.snp.makeConstraints { maker in
-            maker.edges.equalToSuperview()
+            maker.top.equalToSuperview().offset(55)
+            maker.leading.bottom.trailing.equalToSuperview()
         }
     }
     
@@ -165,7 +157,17 @@ extension PlaylistViewController : UIGestureRecognizerDelegate {
     
     private func setupPlayboardView() {
         playboardView.foldItem.addTarget(self, action: #selector(onClickFlodItem(_:)), for: .touchUpInside)
-        tableView.addSubview(playboardView)
+        playboardView.sizeToFit()
+        tableView.tableHeaderView = playboardView
+    }
+    
+    private func setupMaskLayer() {
+        let path = UIBezierPath(roundedRect: view.bounds, cornerRadius: 15)
+        path.close()
+        maskLayer.path = path.cgPath
+        maskLayer.frame = view.bounds
+        maskLayer.frame.origin.y = 55
+        view.layer.mask = maskLayer
     }
     
 }

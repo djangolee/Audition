@@ -63,12 +63,15 @@ class PlayboardView: UIView {
         height += nameLabel.sizeThatFits(size).height + 40
         height += playItem.sizeThatFits(size).height + 30
         height += slider.sizeThatFits(size).height + 15
-        height += 20
+        height += 10
         return CGSize.init(width: UIScreen.main.bounds.width, height: height)
     }
     
     override func sizeToFit() {
         frame.size = sizeThatFits(CGSize.zero)
+        if let tableview = superview as? UITableView {
+            tableview.reloadData()
+        }
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -117,6 +120,9 @@ class PlayboardView: UIView {
     }
     
     @objc private func audioPlayChangeFile(_ sender: NSNotification) {
+        UIView.animate(withDuration: 0.25) {
+            self.sizeToFit()
+        }
         nameLabel.text = playlist.currentSource?.name
     }
     
@@ -137,8 +143,12 @@ class PlayboardView: UIView {
 
 extension PlayboardView {
     
+    override func jo_viewDidInstallSubviews() {
+        super.jo_viewDidInstallSubviews()
+        sizeToFit()
+    }
+    
     public func didSetStyle() {
-        
         switch style {
         case .fold:
             audioTabbar.alpha = 1
@@ -267,7 +277,7 @@ extension PlayboardView {
         nameLabel.textColor = .black
         nameLabel.text = "Not Playing"
         nameLabel.textAlignment = .center
-        nameLabel.numberOfLines = 2
+        nameLabel.numberOfLines = 1
         nameLabel.text = playlist.currentSource?.name ?? "Not Playing"
         addSubview(nameLabel)
     }
