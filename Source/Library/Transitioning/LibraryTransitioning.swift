@@ -18,9 +18,9 @@ class LibraryTransitioning: UIPercentDrivenInteractiveTransition, UIViewControll
     private var maskingView = UIView()
     
     public func dismissUpdate(_ percentComplete: CGFloat) {
-        let scale = 0.06 * percentComplete
+        let scale = 0.05 * min(percentComplete, 1)
         snapshotView.transform = CGAffineTransform(scaleX: 0.94 + scale, y: 0.94 + scale)
-        snapshotView.frame.origin.y = 40 - 20 * percentComplete
+        snapshotView.frame.origin.y = 40 - 15 * min(percentComplete, 1)
     }
     
     public func dismissFinish() {
@@ -153,7 +153,10 @@ class LibraryTransitioning: UIPercentDrivenInteractiveTransition, UIViewControll
             playlistViewController.playboardView.style = .fold
             playlistViewController.view.layoutIfNeeded()
             
-            fromView.frame.origin.y = containerView.bounds.height - playlistViewController.playboardView.audioTabbar.frame.height - 55
+            let tableView = playlistViewController.tableView
+            let offsetY = tableView.frame.origin.y
+            
+            fromView.frame.origin.y = containerView.bounds.height - offsetY - playlistViewController.playboardView.audioTabbar.frame.height
             self.maskingView.alpha = 0
             self.snapshotView.transform = CGAffineTransform(scaleX: 1, y: 1)
             self.snapshotView.frame.origin.y = 0

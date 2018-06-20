@@ -37,63 +37,39 @@ class PlaylistViewController: UIViewController {
 
 extension PlaylistViewController: UITableViewDelegate, UITableViewDataSource {
     
+    static let threshold: CGFloat = 150
+    
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        
-        guard let transitioning = transitioningDelegate as? LibraryTransitioning,
-            scrollView.isTracking
+        guard let transitioning = transitioningDelegate as? LibraryTransitioning
             else {
                 return
         }
         
-        let threshold: CGFloat = 350
         let offsetY = min(tableView.adjustedContentInset.top + tableView.contentOffset.y, 0)
-        
-        if tableView.adjustedContentInset.top + tableView.contentOffset.y <= 0 {
-            CATransaction.begin()
-            CATransaction.setDisableActions(true)
-            maskLayer.frame.origin.y = scrollView.frame.origin.y + abs(offsetY)
-            CATransaction.commit()
-            playboardView.foldItem.direction = .flat
-        } else {
-//            CATransaction.begin()
-//            CATransaction.setDisableActions(true)
-//            maskLayer.frame.origin.y = 55
-//            CATransaction.commit()
-//            playboardView.foldItem.direction = .down
-        }
-        
-//        if scrollView.isTracking, offsetY < 0 {
-//            transitioning.isDismiss = true
-//            transitioning.dismissUpdate(min(1, abs(offsetY) / threshold))
-//        }
-     
-        if !scrollView.isTracking {
-
-//            playboardView.foldItem.direction = .down
-//            if maskLayer.frame.origin.y > 155 {
-//                dismiss(animated: true, completion: nil)
-//                transitioning.dismissFinish()
-//            } else {
-//                transitioning.dismissCancel()
-//            }
-        }
+        CATransaction.begin()
+        CATransaction.setDisableActions(true)
+        maskLayer.frame.origin.y = scrollView.frame.origin.y + abs(offsetY)
+        CATransaction.commit()
+        playboardView.foldItem.direction = maskLayer.frame.origin.y > scrollView.frame.origin.y && scrollView.isTracking ? .flat : .down
+        transitioning.dismissUpdate(max(maskLayer.frame.origin.y - 55, 0) / PlaylistViewController.threshold)
     }
     
     func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
         
-        CATransaction.begin()
-        CATransaction.setDisableActions(true)
-        
         let offsetY = abs(scrollView.contentOffset.y) + scrollView.frame.origin.y
-        scrollView.contentOffset.y = 0
-        maskLayer.frame.origin.y = offsetY
-        tableView.snp.remakeConstraints { maker in
-            maker.top.equalToSuperview().offset(offsetY)
-            maker.leading.bottom.trailing.equalToSuperview()
+        if offsetY > PlaylistViewController.threshold {
+            CATransaction.begin()
+            CATransaction.setDisableActions(true)
+            tableView.snp.remakeConstraints { maker in
+                maker.top.equalToSuperview().offset(offsetY)
+                maker.leading.bottom.trailing.equalToSuperview()
+            }
+            view.layoutIfNeeded()
+            scrollView.contentOffset.y = 0
+            maskLayer.frame.origin.y = offsetY
+            CATransaction.commit()
+            dismiss(animated: true, completion: nil)
         }
-        view.layoutIfNeeded()
-        
-        CATransaction.commit()
     }
 
     

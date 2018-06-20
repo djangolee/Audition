@@ -1,30 +1,39 @@
 PODS:
   - JoUIKit (0.0.10)
-  - Realm (3.7.2):
-    - Realm/Headers (= 3.7.2)
-  - Realm/Headers (3.7.2)
-  - RealmSwift (3.7.2):
-    - Realm (= 3.7.2)
+  - Realm (3.7.4):
+    - Realm/Headers (= 3.7.4)
+  - Realm/Headers (3.7.4)
+  - RealmSwift (3.7.4):
+    - Realm (= 3.7.4)
   - SnapKit (4.0.0)
 
 DEPENDENCIES:
-  - JoUIKit
+  - JoUIKit (from `https://github.com/djangolee/JoUIKit.git`, branch `master`)
   - RealmSwift
   - SnapKit
 
 SPEC REPOS:
   https://github.com/cocoapods/specs.git:
-    - JoUIKit
     - Realm
     - RealmSwift
     - SnapKit
 
+EXTERNAL SOURCES:
+  JoUIKit:
+    :branch: master
+    :git: https://github.com/djangolee/JoUIKit.git
+
+CHECKOUT OPTIONS:
+  JoUIKit:
+    :commit: 6a48d54df9f3e6461a66ce1e7ed49cd36f094d0c
+    :git: https://github.com/djangolee/JoUIKit.git
+
 SPEC CHECKSUMS:
   JoUIKit: 11ca8c3f4398e540619608800b2ec00959abe6a5
-  Realm: dd18c3014e8d90df300b83c6da740067436089c5
-  RealmSwift: 79917cae59a0c43ef8118b233a5978891dd50b4a
+  Realm: a469bb59e33f9926102ccaea4349822c53b9117e
+  RealmSwift: a45861b21c180f5cf0f122144b9759fa8dde3e9e
   SnapKit: a42d492c16e80209130a3379f73596c3454b7694
 
-PODFILE CHECKSUM: 91c1dbd9d12a9a9898e24d717f3ebbd88efe4755
+PODFILE CHECKSUM: a39f82681675c589263a7842fbc2f0fb485f5449
 
 COCOAPODS: 1.5.3

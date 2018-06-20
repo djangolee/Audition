@@ -9,6 +9,6 @@ target 'Audition' do
 #    pod 'RxCocoa', :inhibit_warnings => true
     pod 'RealmSwift', :inhibit_warnings => true
 
-    pod 'JoUIKit', :inhibit_warnings => true
+    pod 'JoUIKit', :git => 'https://github.com/djangolee/JoUIKit.git', :branch => 'master', :inhibit_warnings => true
 
 end
