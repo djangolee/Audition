@@ -16,7 +16,12 @@ public class AudioPlayerList {
         case repeatSingle
     }
     
-    static let `default` = AudioPlayerList()
+    static let lastFilePathKey = "\(AudioPlayerList.self).lastfilepath.key"
+    static let `default`: AudioPlayerList = { () -> AudioPlayerList in
+        let playerList = AudioPlayerList()
+        playerList.loadingLastFile()
+        return playerList
+    }()
     
     public let audioPlayer = AudioPlayer()
     public var playmode: PlayMode = .repeatSingle
@@ -69,7 +74,7 @@ public class AudioPlayerList {
     public func play(_ file: FileManager.FileInfo) {
         guard file.isSound
             else { return }
-
+        
         playlist = playlist ?? []
         playlist?.append(file)
         _paly(file)
@@ -124,6 +129,12 @@ public class AudioPlayerList {
         }
         repeatSinglelist = [file]
         audioPlayer.play(file)
+        let home = NSHomeDirectory()
+        var path = file.path
+        if let range = path.range(of: home) {
+            path.removeSubrange(range)
+        }
+        UserDefaults.standard.set(path, forKey: AudioPlayerList.lastFilePathKey)
     }
     
     private func check(by offset: Int) {
@@ -160,5 +171,24 @@ public class AudioPlayerList {
             index = list.count - 1
         }
         _paly(list[index])
+    }
+    
+    private func loadingLastFile() {
+        guard let path = UserDefaults.standard.object(forKey: AudioPlayerList.lastFilePathKey) as? String
+            else {
+                return
+        }
+        
+        guard let item = try? FileManager.FileInfo(NSHomeDirectory() + path)
+            else {
+                return
+        }
+        
+        guard let file = item
+            else {
+                return
+        }
+        
+        play(file.siblingAudio(), file: file)
     }
 }

@@ -57,7 +57,7 @@ extension PlaylistViewController: UITableViewDelegate, UITableViewDataSource {
     func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
         
         let offsetY = abs(scrollView.contentOffset.y) + scrollView.frame.origin.y
-        if offsetY > PlaylistViewController.threshold {
+        if scrollView.contentOffset.y < 0, offsetY > PlaylistViewController.threshold {
             CATransaction.begin()
             CATransaction.setDisableActions(true)
             tableView.snp.remakeConstraints { maker in
@@ -138,7 +138,7 @@ extension PlaylistViewController : UIGestureRecognizerDelegate {
     }
     
     private func setupMaskLayer() {
-        let path = UIBezierPath(roundedRect: view.bounds, cornerRadius: 15)
+        let path = UIBezierPath(roundedRect: view.bounds, cornerRadius: 8)
         path.close()
         maskLayer.path = path.cgPath
         maskLayer.frame = view.bounds
