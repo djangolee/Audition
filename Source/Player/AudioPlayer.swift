@@ -42,7 +42,7 @@ public class AudioPlayer: NSObject {
     
     public override init() {
         super.init()
-        
+        NotificationCenter.default.addObserver(self, selector: #selector(audioSessionInterruption(_:)), name: AVAudioSession.routeChangeNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(audioSessionInterruption(_:)), name: AVAudioSession.interruptionNotification, object: nil)
         AudioPlayer.setActive(true)
     }
@@ -69,9 +69,10 @@ public class AudioPlayer: NSObject {
         audioPlayer?.prepareToPlay()
         
         timer = Timer(timeInterval: 0.5, target: self, selector: #selector(timeRunloop(_:)), userInfo: nil, repeats: true)
-        RunLoop.main.add(timer!, forMode: RunLoop.Mode.common)
-        
+        RunLoop.main.add(timer!, forMode: RunLoopMode.commonModes)
         NotificationCenter.default.post(name: AudioPlayer.audioPlayChangeFileNotification, object: self)
+        
+        print(AudioPlayer.outputPortType())
         
         return self
     }
@@ -82,12 +83,53 @@ public class AudioPlayer: NSObject {
         
         NotificationCenter.default.post(name: AudioPlayer.audioPlayChangeProgressNotification, object: self)
     }
+    /**
+     *  监听耳机插入拔出状态的改变
+     *  @param notification 通知
+     */
+//    - (void)audioRouteChangeListenerCallback:(NSNotification *)notification {
+//    NSDictionary *interuptionDict = notification.userInfo;
+//    NSInteger routeChangeReason   = [[interuptionDict
+//    valueForKey:AVAudioSessionRouteChangeReasonKey] integerValue];
+//    switch (routeChangeReason) {
+//    case AVAudioSessionRouteChangeReasonNewDeviceAvailable:
+//    DLog(@"AVAudioSessionRouteChangeReasonNewDeviceAvailable");
+//    //插入耳机时关闭扬声器播放
+//    [self.agoraKit setEnableSpeakerphone:NO];
+//    break;
+//    case AVAudioSessionRouteChangeReasonOldDeviceUnavailable:
+//    DLog(@"AVAudioSessionRouteChangeReasonOldDeviceUnavailable");
+//    //拔出耳机时的处理为开启扬声器播放
+//    [self.agoraKit setEnableSpeakerphone:YES];
+//    break;
+//    case AVAudioSessionRouteChangeReasonCategoryChange:
+//    // called at start - also when other audio wants to play
+//    NSLog(@"AVAudioSessionRouteChangeReasonCategoryChange");
+//    break;
+//    }
+//    }
     
+    @objc private func audioSessionRouteChange(_ sender: Notification) {
+        print(AudioPlayer.outputPortType())
+        guard let routeChangeReasonNumber = sender.userInfo?[AVAudioSessionRouteChangeReasonKey] as? NSNumber,
+            let routeChangeReason = AVAudioSession.RouteChangeReason(rawValue: routeChangeReasonNumber.uintValue) else {
+                return
+        }
+        
+        switch routeChangeReason {
+        case .unknown, .categoryChange, .override, .wakeFromSleep, .noSuitableRouteForCategory, .routeConfigurationChange:
+            break
+        case .newDeviceAvailable:
+            break
+        case .oldDeviceUnavailable:
+            break
+        }
+    }
+        
     @objc private func audioSessionInterruption(_ sender: Notification) {
         
         guard let interruptionTypeNumber = sender.userInfo?[AVAudioSessionInterruptionTypeKey] as? NSNumber,
-            let interruptionType = AVAudioSession.InterruptionType(rawValue: interruptionTypeNumber.uintValue)
-            else {
+            let interruptionType = AVAudioSession.InterruptionType(rawValue: interruptionTypeNumber.uintValue) else {
                 return
         }
         
@@ -152,11 +194,21 @@ public class AudioPlayer: NSObject {
         UIApplication.shared.beginReceivingRemoteControlEvents()
         let session = AVAudioSession.sharedInstance()
         do {
-            try session.setCategory(.playAndRecord, mode: .default, options: [.allowBluetooth, .defaultToSpeaker])
+            try session.setCategory(.playback, mode: .default, options: [.defaultToSpeaker])
             try session.setActive(active, options: .notifyOthersOnDeactivation)
         } catch {
             print("Unable to activate audio session:  \(error.localizedDescription)")
         }
+    }
+    
+    public class func outputPortType() -> [AVAudioSession.Port] {
+        UIApplication.shared.beginReceivingRemoteControlEvents()
+        let session = AVAudioSession.sharedInstance()
+        var ports: [AVAudioSession.Port] = []
+        for output in session.currentRoute.outputs {
+            ports.append(output.portType)
+        }
+        return ports
     }
 }
 

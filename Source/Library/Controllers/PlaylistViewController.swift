@@ -72,7 +72,6 @@ extension PlaylistViewController: UITableViewDelegate, UITableViewDataSource {
         }
     }
 
-    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return playlist.playlist?.count ?? 0
     }
