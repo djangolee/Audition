@@ -32,7 +32,7 @@ extension FileManager {
         }
         
         var isSound: Bool {
-            return ["mp3", "wav"].contains(pathExtension)
+            return ["mp3", "wav", "flac"].contains(pathExtension)
         }
         
         init?(_ path: String) throws {
@@ -107,7 +107,7 @@ extension FileManager {
                 return UIImage(named: "file")
             } else if type == FileAttributeType.typeDirectory {
                 return UIImage(named: "folder")
-            } else if ["mp3", "wav"].contains(pathExtension) {
+            } else if isSound {
                 return UIImage(named: "audio")
             }
             return UIImage(named: "file")

@@ -24,7 +24,7 @@ public class AudioPlayerList {
     }()
     
     public let audioPlayer = AudioPlayer()
-    public var playmode: PlayMode = .repeatSingle
+    public var playmode: PlayMode = .repeatAll
     
     private(set) var playlist: [FileManager.FileInfo]? = nil {
         didSet {

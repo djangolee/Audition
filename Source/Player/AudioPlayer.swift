@@ -10,7 +10,7 @@ import UIKit
 import AVFoundation
 
 public class AudioPlayer: NSObject {
-
+    
     // MARK: Notification
     
     public static let audioPlayChangeProgressNotification: NSNotification.Name = NSNotification.Name(rawValue: "com.audioplayer.progress")
@@ -31,7 +31,11 @@ public class AudioPlayer: NSObject {
     fileprivate (set) var source: FileManager.FileInfo?
     
     fileprivate (set) var state: State = .stop {
-        didSet { NotificationCenter.default.post(name: AudioPlayer.audioPlayChangeStateNotification, object: self) }
+        didSet {
+            DispatchQueue.main.async {
+                NotificationCenter.default.post(name: AudioPlayer.audioPlayChangeStateNotification, object: self)
+            }
+        }
     }
     
     public var isPlaying: Bool { return audioPlayer?.isPlaying ?? false }
@@ -42,7 +46,8 @@ public class AudioPlayer: NSObject {
     
     public override init() {
         super.init()
-        NotificationCenter.default.addObserver(self, selector: #selector(audioSessionInterruption(_:)), name: AVAudioSession.routeChangeNotification, object: nil)
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(audioSessionRouteChange(_:)), name: AVAudioSession.routeChangeNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(audioSessionInterruption(_:)), name: AVAudioSession.interruptionNotification, object: nil)
         AudioPlayer.setActive(true)
     }
@@ -55,12 +60,12 @@ public class AudioPlayer: NSObject {
     private var timer: Timer?
     
     // MARK: Control
-
+    
     @discardableResult
     public func play(_ file: FileManager.FileInfo) -> Self {
         guard file.isSound
             else { return self }
-
+        
         stop()
         
         source = file
@@ -70,47 +75,21 @@ public class AudioPlayer: NSObject {
         
         timer = Timer(timeInterval: 0.5, target: self, selector: #selector(timeRunloop(_:)), userInfo: nil, repeats: true)
         RunLoop.main.add(timer!, forMode: RunLoopMode.commonModes)
-        NotificationCenter.default.post(name: AudioPlayer.audioPlayChangeFileNotification, object: self)
-        
-        print(AudioPlayer.outputPortType())
-        
+        DispatchQueue.main.async {
+            NotificationCenter.default.post(name: AudioPlayer.audioPlayChangeFileNotification, object: self)
+        }
         return self
     }
     
     @objc private func timeRunloop(_ sender: UIControl) {
         guard state == .playing
             else { return }
-        
-        NotificationCenter.default.post(name: AudioPlayer.audioPlayChangeProgressNotification, object: self)
+        DispatchQueue.main.async {
+            NotificationCenter.default.post(name: AudioPlayer.audioPlayChangeProgressNotification, object: self)
+        }
     }
-    /**
-     *  监听耳机插入拔出状态的改变
-     *  @param notification 通知
-     */
-//    - (void)audioRouteChangeListenerCallback:(NSNotification *)notification {
-//    NSDictionary *interuptionDict = notification.userInfo;
-//    NSInteger routeChangeReason   = [[interuptionDict
-//    valueForKey:AVAudioSessionRouteChangeReasonKey] integerValue];
-//    switch (routeChangeReason) {
-//    case AVAudioSessionRouteChangeReasonNewDeviceAvailable:
-//    DLog(@"AVAudioSessionRouteChangeReasonNewDeviceAvailable");
-//    //插入耳机时关闭扬声器播放
-//    [self.agoraKit setEnableSpeakerphone:NO];
-//    break;
-//    case AVAudioSessionRouteChangeReasonOldDeviceUnavailable:
-//    DLog(@"AVAudioSessionRouteChangeReasonOldDeviceUnavailable");
-//    //拔出耳机时的处理为开启扬声器播放
-//    [self.agoraKit setEnableSpeakerphone:YES];
-//    break;
-//    case AVAudioSessionRouteChangeReasonCategoryChange:
-//    // called at start - also when other audio wants to play
-//    NSLog(@"AVAudioSessionRouteChangeReasonCategoryChange");
-//    break;
-//    }
-//    }
     
     @objc private func audioSessionRouteChange(_ sender: Notification) {
-        print(AudioPlayer.outputPortType())
         guard let routeChangeReasonNumber = sender.userInfo?[AVAudioSessionRouteChangeReasonKey] as? NSNumber,
             let routeChangeReason = AVAudioSession.RouteChangeReason(rawValue: routeChangeReasonNumber.uintValue) else {
                 return
@@ -122,10 +101,11 @@ public class AudioPlayer: NSObject {
         case .newDeviceAvailable:
             break
         case .oldDeviceUnavailable:
+            self.suspend()
             break
         }
     }
-        
+    
     @objc private func audioSessionInterruption(_ sender: Notification) {
         
         guard let interruptionTypeNumber = sender.userInfo?[AVAudioSessionInterruptionTypeKey] as? NSNumber,
@@ -202,7 +182,6 @@ public class AudioPlayer: NSObject {
     }
     
     public class func outputPortType() -> [AVAudioSession.Port] {
-        UIApplication.shared.beginReceivingRemoteControlEvents()
         let session = AVAudioSession.sharedInstance()
         var ports: [AVAudioSession.Port] = []
         for output in session.currentRoute.outputs {
