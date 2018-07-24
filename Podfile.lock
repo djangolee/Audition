@@ -3,27 +3,18 @@ PODS:
   - SnapKit (4.0.0)
 
 DEPENDENCIES:
-  - JoUIKit (from `https://github.com/djangolee/JoUIKit.git`, branch `master`)
+  - JoUIKit
   - SnapKit
 
 SPEC REPOS:
   https://github.com/cocoapods/specs.git:
+    - JoUIKit
     - SnapKit
-
-EXTERNAL SOURCES:
-  JoUIKit:
-    :branch: master
-    :git: https://github.com/djangolee/JoUIKit.git
-
-CHECKOUT OPTIONS:
-  JoUIKit:
-    :commit: 6a48d54df9f3e6461a66ce1e7ed49cd36f094d0c
-    :git: https://github.com/djangolee/JoUIKit.git
 
 SPEC CHECKSUMS:
   JoUIKit: 11ca8c3f4398e540619608800b2ec00959abe6a5
   SnapKit: a42d492c16e80209130a3379f73596c3454b7694
 
-PODFILE CHECKSUM: c8eb65e06e993c7a618a43d87c98d2358b700056
+PODFILE CHECKSUM: 8ac2e3c1a3d6c82aa290fde73b02e051b608fe4e
 
 COCOAPODS: 1.5.3

@@ -62,6 +62,7 @@ extension LibraryViewController: UITableViewDelegate, UITableViewDataSource {
         }
 
         let file = source[indexPath.item]
+        print(file.path)
         if let source = file.contentsOfDirectory(), source.count > 0 {
             navigationController?.pushViewController(LibraryViewController(source, title: file.name), animated: true)
         } else if file.isSound {

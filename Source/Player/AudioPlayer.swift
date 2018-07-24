@@ -74,7 +74,7 @@ public class AudioPlayer: NSObject {
         audioPlayer?.prepareToPlay()
         
         timer = Timer(timeInterval: 0.5, target: self, selector: #selector(timeRunloop(_:)), userInfo: nil, repeats: true)
-        RunLoop.main.add(timer!, forMode: RunLoopMode.commonModes)
+        RunLoop.main.add(timer!, forMode: RunLoop.Mode.common)
         DispatchQueue.main.async {
             NotificationCenter.default.post(name: AudioPlayer.audioPlayChangeFileNotification, object: self)
         }

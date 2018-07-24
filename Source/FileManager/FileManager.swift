@@ -32,7 +32,7 @@ extension FileManager {
         }
         
         var isSound: Bool {
-            return ["mp3", "wav", "flac"].contains(pathExtension)
+            return ["mp3", "wav", "flac", "m4a"].contains(pathExtension)
         }
         
         init?(_ path: String) throws {
